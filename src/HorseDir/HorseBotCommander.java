@@ -37,14 +37,20 @@ public class HorseBotCommander {
             case "!horse":
                 if (LAST_HORSE_DEATH.containsKey(channel.channel)) {
                     messenger.privmsg(channel, String.format(
-                            "It has been %s since %s was last killed by a horse.",
+                            "It has been %s since %s was last killed by a horse. \uD83D\uDC0E",
                             timeDifference(LAST_HORSE_DEATH.get(channel.channel)),
                             channel.nick
                     ));
                 }
                 break;
             case "!commands":
-                messenger.privmsg(channel, "HorseBotXD commands: !info, !horse, !murder");
+                messenger.privmsg(channel, "!info, !horse, !murder, !horsefact \uD83D\uDC0E");
+                break;
+            case "!info":
+                messenger.privmsg(channel, "HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot. \uD83D\uDC0E");
+                break;
+            case "!horsefact":
+                messenger.privmsg(channel, "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to the research, please type !addfact <your fact>. \uD83D\uDC0E");
                 break;
             case "!neigh":
                 if (user.contains("glitch29") || user.contains(channel.name)) {
@@ -58,7 +64,7 @@ public class HorseBotCommander {
                     ));
                 }
                 break;
-            case "!secret":
+            case "!\uD83D\uDC0E":
                 messenger.privmsg(channel, "\uD83D\uDC0E");
                 messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E");
                 messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E\uD83D\uDC0E");
@@ -68,7 +74,7 @@ public class HorseBotCommander {
             case "!murder":
                 if (LAST_HORSE_MURDER.containsKey(channel.channel)) {
                     messenger.privmsg(channel, String.format(
-                            "It has been %s since %s brutally murdered a horse.",
+                            "It has been %s since %s brutally murdered a horse. \uD83D\uDC0E",
                             timeDifference(LAST_HORSE_MURDER.get(channel.channel)),
                             channel.nick
                     ));
