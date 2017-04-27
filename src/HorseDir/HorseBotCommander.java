@@ -47,7 +47,7 @@ public class HorseBotCommander {
                 messenger.privmsg(channel, "!info, !horse, !murder, !horsefact \uD83D\uDC0E");
                 break;
             case "!info":
-                messenger.privmsg(channel, "HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot. \uD83D\uDC0E");
+                messenger.privmsg(channel, "HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
                 break;
             case "!horsefact":
                 messenger.privmsg(channel, "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to the research, please type !addfact <your fact>. \uD83D\uDC0E");
@@ -65,11 +65,13 @@ public class HorseBotCommander {
                 }
                 break;
             case "!\uD83D\uDC0E":
-                messenger.privmsg(channel, "\uD83D\uDC0E");
-                messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E");
-                messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E\uD83D\uDC0E");
-                messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E");
-                messenger.privmsg(channel, "\uD83D\uDC0E");
+                if (user.contains("glitch29")) {
+                    messenger.privmsg(channel, "\uD83D\uDC0E");
+                    messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E");
+                    messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E\uD83D\uDC0E");
+                    messenger.privmsg(channel, "\uD83D\uDC0E\uD83D\uDC0E");
+                    messenger.privmsg(channel, "\uD83D\uDC0E");
+                }
                 break;
             case "!murder":
                 if (LAST_HORSE_MURDER.containsKey(channel.channel)) {
