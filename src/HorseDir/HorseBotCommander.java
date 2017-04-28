@@ -50,7 +50,8 @@ public class HorseBotCommander {
                 messenger.privmsg(channel, "HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
                 break;
             case "!horsefact":
-                messenger.privmsg(channel, "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to the research, please type !addfact <your fact>. \uD83D\uDC0E");
+                messenger.privmsg(channel, HorseFact.fact());
+                //messenger.privmsg(channel, "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to the research, please type !addfact <your fact>. \uD83D\uDC0E");
                 break;
             case "!neigh":
                 if (user.contains("glitch29") || user.contains(channel.name)) {

@@ -17,7 +17,8 @@ public class HorseBot {
             new Channel("#jgiga", "Jgiga"),
             new Channel("#loloup", "Lolo"),
             new Channel("#glitch29", "Glitch"),
-            new Channel("#jerrytheret","Jerry")
+            new Channel("#jerrytheret","Jerry"),
+            new Channel("#detroph", "Detroph")
     ));
 
     public static void main(String[] args) throws Exception {
