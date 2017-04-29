@@ -2,11 +2,14 @@ package HorseDir;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by Aaron Fisher on 4/28/2017.
  */
 public class HorseFact {
+    private static final Random random = new Random(new Date().getTime());
     public static final ArrayList<String> HORSE_FACTS = new ArrayList<>(Arrays.asList(
             "Horses look like this --> 🐎",
             "Horses were first introduced to North America in the late 1600's. They proceeded to be tamed by various indigenous tribes over the next hundred years, their biggest advancement came when in 1992 The Undertaker threw Mankind off Hell In A Cell, and plummeted 16 ft through an announcer’s table.",
@@ -25,7 +28,7 @@ public class HorseFact {
             ));
 
     public static String fact() {
-        return fact((int) (Math.random() * HORSE_FACTS.size()));
+        return fact(random.nextInt(HORSE_FACTS.size()));
     }
 
     public static String fact(int i) {
