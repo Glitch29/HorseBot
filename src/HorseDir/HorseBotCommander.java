@@ -87,7 +87,7 @@ public class HorseBotCommander {
                 if (user.contains("glitch29") || user.contains(channel.name)) {
                     long newDeath = scanner.hasNextLong() ? scanner.nextLong() : new Date().getTime();
                     writeMurder(channel.channel, newDeath);
-                    LAST_HORSE_DEATH.put(channel.channel, newDeath);
+                    LAST_HORSE_MURDER.put(channel.channel, newDeath);
                     messenger.privmsg(channel, String.format(
                             "It has been %s since %s brutally murdered a horse. D:",
                             timeDifference(LAST_HORSE_DEATH.get(channel.channel)),
