@@ -34,6 +34,7 @@ public class HorseBotCommander {
         Scanner scanner = new Scanner(body);
         writeEvent(user,channel.channel,body);
         switch (scanner.next()) {
+            case "!Horse":
             case "!horse":
                 if (LAST_HORSE_DEATH.containsKey(channel.channel)) {
                     messenger.privmsg(channel, String.format(
@@ -52,6 +53,12 @@ public class HorseBotCommander {
             case "!horsefact":
                 messenger.privmsg(channel, HorseFact.fact());
                 //messenger.privmsg(channel, "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to the research, please type !addfact <your fact>. \uD83D\uDC0E");
+                break;
+            case "!who's":
+            case "!Who's":
+            case "!whose":
+            case "!Whose":
+                messenger.privmsg(channel, "Horse.");
                 break;
             case "!neigh":
                 if (user.contains("glitch29") || user.contains(channel.name)) {

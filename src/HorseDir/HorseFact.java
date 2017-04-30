@@ -24,7 +24,12 @@ public class HorseFact {
             "Horses with solid coloring are faster, but more disobedient than those with patterned coats. The fastest and most disobedient horses look like trees.",
             "The card game Magic: the Gathering has featured horses in its artwork dating all the way back its first set, Alpha, published in 1993. However it was not until the printing of Magic 2010 that Horse was officially recognized as its own creature type.",
             "Look at my Horse. My Horse is amazing!",
-            "Don't look at me, my horse, or my horse's son ever again."
+            "Don't look at me, my horse, or my horse's son ever again.",
+            "H-O-R-S-E is a basketball variant played by 2 or more players. It involves alternating players taking a shot with their choice of style and location which, if successful, their opponents must attempt to reproduce.",
+            "Knock, knock.",
+            "4 out of 5 horses recommend Colgate.",
+            "In the 16th century, “horse” was a common adjective describing anything strong, big, or coarse. Along with horseplay, that’s how horseradish got its name.",
+            "Canadian horses (or as they often are referred to, møøse) are the single most frequent cause of automobile accidents in lumberjack country."
             ));
 
     public static String fact() {
