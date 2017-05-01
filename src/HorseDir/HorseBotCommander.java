@@ -33,6 +33,12 @@ public class HorseBotCommander {
                         channel.nick
                 ));
                 break;
+            case "!panic":
+                if (user.contains("glitch29") || user.contains(channel.name)) {
+                    messenger.privmsg(channel, "The stream! panicBasket The stream! panicBasket The stream is on fire!");
+                    messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
+                }
+                break;
             case "!commands":
                 messenger.privmsg(channel, "!info, !horse, !murder, !horsefact \uD83D\uDC0E");
                 break;
