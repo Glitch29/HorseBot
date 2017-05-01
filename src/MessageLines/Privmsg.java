@@ -16,7 +16,7 @@ public class Privmsg extends AbstractMessageLine {
     }
 
     public Privmsg(Channel channel, String body) {
-        super(HEADER + channel + " " + body);
+        super(HEADER + channel + " :" + body);
     }
 
     public Privmsg(String user, Channel channel, String body) {

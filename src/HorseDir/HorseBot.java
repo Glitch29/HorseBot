@@ -12,12 +12,15 @@ import java.util.*;
  * Created by Aaron Fisher on 4/20/2017.
  */
 public class HorseBot {
+    private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
     private static Account ACCOUNT = new HorseBotXD();
     private static final List<Channel> CHANNELS = new ArrayList<>(Arrays.asList(
             new Channel("#jgiga", "Jgiga"),
             new Channel("#loloup", "Lolo"),
             new Channel("#glitch29", "Glitch"),
-            new Channel("#jerrytheret","Jerry")
+            new Channel("#jerrytheret","Jerry"),
+            new Channel("#detroph", "Detroph"),
+            new Channel("#enderurns", "Ender")
     ));
 
     public static void main(String[] args) throws Exception {
@@ -25,7 +28,8 @@ public class HorseBot {
         IrcSession ircSession = TwitchIrcSession.getTwitchIRC(ACCOUNT);
         HorseBotMessenger messenger = new HorseBotMessenger(ircSession.getWriter());
         HorseBotListener listener = new HorseBotListener(ircSession.getReader(), CHANNELS);
-        HorseBotCommander commander = new HorseBotCommander(messenger);
+        HorseBotDatabase database = new HorseBotDatabase(DIRECTORY);
+        HorseBotCommander commander = new HorseBotCommander(messenger, database);
 
         // Join the channels.
         for(Channel channel : CHANNELS) {
