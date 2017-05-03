@@ -1,6 +1,7 @@
 package Adventures;
 
 import Adventures.Commands.Command;
+import Adventures.Deaths.Death;
 import Adventures.Locations.AbstractLocation;
 import Adventures.Locations.Tavern;
 import Adventures.Players.AdvCharacter;
@@ -18,7 +19,7 @@ public class Adventure {
     private Channel channel;
     private long endTime;
     private Map<Player, AdvCharacter> playerMap;
-    private List<Player> playerList;
+    private List<Player> timeOutList;
     private AbstractLocation location;
     private HorseBotMessenger messenger;
 
@@ -27,7 +28,7 @@ public class Adventure {
         this.endTime = new Date().getTime() + (minutes * 60 * 1000);
         this.messenger = messenger;
         playerMap = new HashMap<>();
-        playerList = new ArrayList<>();
+        timeOutList = new ArrayList<>();
         location = new Tavern(this);
     }
 
@@ -37,23 +38,38 @@ public class Adventure {
             playerMap.put(player, new AdvCharacter(player));
         }
         try {
-            Command command = Command.valueOf(message.body.substring(2));
+            Command command = Command.valueOf(message.body.substring(2).toUpperCase());
             location.command(playerMap.get(player),command);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-//    public void advanceLocation(AbstractLocation location) {
-//        this.location.embark()
-//
-//    }
+    public void advanceLocation(AbstractLocation location) {
+        this.location = location;
+
+    }
 
     public void end() {
-        publicMessage("RIP adventure.");
+        publicMessage("The adventure has ended. All deceased players have had their chat privileges restored.");
+        for (Player player : timeOutList) {
+            publicMessage("/unban " + player.username);
+        }
     }
 
     public void publicMessage(String message) {
         messenger.privmsg(channel, message);
+    }
+
+    public void whisper(AdvCharacter character, String message) {
+        messenger.privmsg(channel, "/w " + character.player.username + " " + message);
+    }
+
+    public void kill(AdvCharacter character, Death death) {
+        publicMessage(String.format(death.message, character) + " AngelThump");
+        publicMessage("/timeout " + character.player.username);
+        whisper(character, "You are dead. :-(");
+        playerMap.remove(character.player);
+        timeOutList.add(character.player);
     }
 }

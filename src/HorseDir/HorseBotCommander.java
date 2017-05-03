@@ -41,6 +41,13 @@ public class HorseBotCommander {
                     messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
                 }
                 break;
+            case "!wr":
+                messenger.privmsg(channel, String.format(
+                        "%s doesn't need world record to be proud of his or her accomplishments. What are you implying %s?",
+                        channel.nick,
+                        user
+                ));
+                break;
             case "!adventure":
                 if (user.contains("glitch29") || user.contains("jgiga")) {
                     adventurer.beginAdventure(channel, 3);
@@ -60,12 +67,7 @@ public class HorseBotCommander {
             case "!horsefact":
                 messenger.privmsg(channel, HorseFact.fact());
                 break;
-            case "!whos":
             case "!who's":
-            case "!whose":
-            case "!whosthere":
-            case "!who'sthere":
-            case "!whosethere":
                 messenger.privmsg(channel, "Horse.");
                 break;
             case "!neigh":
