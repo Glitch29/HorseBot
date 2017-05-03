@@ -28,10 +28,10 @@ public class HorseBotDatabase {
     }
 
     public Long read(Tracker tracker, Channel channel) {
-        if (!readTracker(tracker).containsKey(channel.channel)) {
+        if (!readTracker(tracker).containsKey(channel.name)) {
             return 0L;
         }
-        return readTracker(tracker).get(channel.channel);
+        return readTracker(tracker).get(channel.name);
     }
 
     public long track(Tracker tracker, Channel channel) {
@@ -39,9 +39,9 @@ public class HorseBotDatabase {
     }
 
     public long track(Tracker tracker, Channel channel, Long time) {
-        readTracker(tracker).put(channel.channel, time);
+        readTracker(tracker).put(channel.name, time);
         try (FileWriter writer = new FileWriter(new File(directory + tracker.fileName), true)) {
-            writer.write(channel.channel + " " + time + "\n");
+            writer.write(channel.name + " " + time + "\n");
             writer.flush();
         } catch (Exception e) {
             e.printStackTrace();

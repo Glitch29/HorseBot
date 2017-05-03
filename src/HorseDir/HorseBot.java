@@ -6,6 +6,8 @@ import Accounts.Account;
 import Accounts.HorseBotXD;
 import MessageLines.Privmsg;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -13,23 +15,27 @@ import java.util.*;
  */
 public class HorseBot {
     private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
+    private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
     private static Account ACCOUNT = new HorseBotXD();
-    private static final List<Channel> CHANNELS = new ArrayList<>(Arrays.asList(
-            new Channel("#jgiga", "Jgiga"),
-            new Channel("#loloup", "Lolo"),
-            new Channel("#glitch29", "Glitch"),
-            new Channel("#jerrytheret","Jerry"),
-            new Channel("#detroph", "Detroph"),
-            new Channel("#enderurns", "Ender")
-    ));
+    private static final List<Channel> CHANNELS = new ArrayList<>();
+    static {
+        try (Scanner scanner = new Scanner(new File(DIRECTORY + CHANNEL_LIST))) {
+            while (scanner.hasNext()) {
+                CHANNELS.add(Channel.get(scanner.next(), scanner.next()));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) throws Exception {
 
         IrcSession ircSession = TwitchIrcSession.getTwitchIRC(ACCOUNT);
         HorseBotMessenger messenger = new HorseBotMessenger(ircSession.getWriter());
-        HorseBotListener listener = new HorseBotListener(ircSession.getReader(), CHANNELS);
+        HorseBotListener listener = new HorseBotListener(ircSession.getReader());
         HorseBotDatabase database = new HorseBotDatabase(DIRECTORY);
-        HorseBotCommander commander = new HorseBotCommander(messenger, database);
+        HorseBotAdventurer adventurer = new HorseBotAdventurer(messenger);
+        HorseBotCommander commander = new HorseBotCommander(messenger, database, adventurer);
 
         // Join the channels.
         for(Channel channel : CHANNELS) {
@@ -46,6 +52,9 @@ public class HorseBot {
                     Privmsg privmsg = listener.readPrivmsg();
                     if (privmsg.body.charAt(0) == '!') {
                         commander.command(privmsg.user, privmsg.channel, privmsg.body);
+                    }
+                    if (privmsg.body.contains("\uD83D\uDC0E")) {
+                        adventurer.command(privmsg);
                     }
                     break;
             }

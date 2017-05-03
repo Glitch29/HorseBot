@@ -44,7 +44,7 @@ public class HorseFact {
             "Knock, knock.",
             "4 out of 5 horses recommend Colgate.",
             "In the 16th century, “horse” was a common adjective describing anything strong, big, or coarse. Along " +
-                    "with horseplay, that’s how horseradish got its name.",
+                    "with horseplay, that’s how horseradish got its broadcaster.",
             "The Canada horse, commonly referred to as møøse, is the single most frequent cause of automobile " +
                     "accidents in lumberjack country.",
             "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to " +
