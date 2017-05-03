@@ -1,9 +1,12 @@
 package Adventures.Players;
 
+import java.util.Date;
+import java.util.Random;
+
 /**
  * Created by Aaron Fisher on 4/29/2017.
  */
-public enum Occupation {
+public enum CharacterClass {
     Cobbler,
     Gardener,
     Wordsmith,
@@ -15,6 +18,7 @@ public enum Occupation {
     Leper,
     Prestidigitarian,
     Dwarf,
+    Prime_Minister ("Prime Minister"),
     Gazebo,
     Gastroenterologist,
     Speedrunner,
@@ -23,10 +27,11 @@ public enum Occupation {
     Gargoyle,
     Pikachu,
     Elephant,
-//    Ninja_Turtle,
+    Ninja_Turtle ("Ninja Turtle"),
     Federalist,
     Spambot,
-//    Menace_to_Society,
+    Menace_to_Society ("Menace to Society"),
+    Chess_boxer ("Chess-boxer"),
     Dietician,
     Pleb,
     Detective,
@@ -36,7 +41,6 @@ public enum Occupation {
     Cowboy,
     Paraglider,
     Rockette,
-//    Chess_Boxer,
     Labradoodle,
     Thief,
     Rogue,
@@ -54,4 +58,19 @@ public enum Occupation {
     Monk,
     Knave,
     Gumshoe;
+
+    String name;
+    CharacterClass(String name) {
+        this.name = name;
+    }
+    CharacterClass() {
+        this.name = this.toString();
+    }
+
+    private static final Random random = new Random(new Date().getTime());
+
+    static CharacterClass randomClass() {
+        return CharacterClass.values()[random.nextInt(CharacterClass.values().length)];
+    }
+
 }

@@ -1,11 +1,13 @@
 package Adventures;
 
-import Adventures.Deaths.AbstractDeath;
-import Adventures.Deaths.EmptyTavern;
+import Adventures.Commands.Command;
 import Adventures.Locations.AbstractLocation;
 import Adventures.Locations.Tavern;
+import Adventures.Players.AdvCharacter;
+import Adventures.Players.Player;
 import HorseDir.Channel;
 import HorseDir.HorseBotMessenger;
+import MessageLines.Privmsg;
 
 import java.util.*;
 
@@ -15,7 +17,7 @@ import java.util.*;
 public class Adventure {
     private Channel channel;
     private long endTime;
-    private Map<String, Player> playerMap;
+    private Map<Player, AdvCharacter> playerMap;
     private List<Player> playerList;
     private AbstractLocation location;
     private HorseBotMessenger messenger;
@@ -26,28 +28,32 @@ public class Adventure {
         this.messenger = messenger;
         playerMap = new HashMap<>();
         playerList = new ArrayList<>();
-        location = new Tavern(channel, messenger, new Date().getTime() + 30L * 1000L);
-        location.beginLocation(playerList);
+        location = new Tavern(this);
     }
 
-    public void command(Channel channel, String user, String body) {
-        if (!playerMap.containsKey(channel.toString() + user)) {
-            Player newPlayer = new Player(user);
-            playerMap.put(channel.toString() + user, newPlayer);
-            if (location.canAddPlayer()) {
-                playerList.add(newPlayer);
-            } else {
-                new EmptyTavern(newPlayer, messenger, channel).kill();
-            }
+    public void command(Privmsg message) {
+        Player player = new Player(message.channel, message.user);
+        if (!playerMap.containsKey(player)) {
+            playerMap.put(player, new AdvCharacter(player));
         }
-
+        try {
+            Command command = Command.valueOf(message.body.substring(2));
+            location.command(playerMap.get(player),command);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void advance() {
+//    public void advanceLocation(AbstractLocation location) {
+//        this.location.embark()
+//
+//    }
 
+    public void end() {
+        publicMessage("RIP adventure.");
     }
 
-    private int translate(String body) {
-        switch ()
+    public void publicMessage(String message) {
+        messenger.privmsg(channel, message);
     }
 }

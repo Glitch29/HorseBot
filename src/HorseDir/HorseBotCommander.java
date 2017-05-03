@@ -9,10 +9,12 @@ import java.util.Scanner;
 public class HorseBotCommander {
     private HorseBotMessenger messenger;
     private HorseBotDatabase database;
+    private HorseBotAdventurer adventurer;
 
-    public HorseBotCommander(HorseBotMessenger messenger, HorseBotDatabase database) {
+    public HorseBotCommander(HorseBotMessenger messenger, HorseBotDatabase database, HorseBotAdventurer adventurer) {
         this.messenger = messenger;
         this.database = database;
+        this.adventurer = adventurer;
     }
 
     public void command(String user, Channel channel, String body) {
@@ -34,9 +36,19 @@ public class HorseBotCommander {
                 ));
                 break;
             case "!panic":
-                if (user.contains("glitch29") || user.contains(channel.name)) {
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     messenger.privmsg(channel, "The stream! panicBasket The stream! panicBasket The stream is on fire!");
                     messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
+                }
+                break;
+            case "!adventure":
+                if (user.contains("glitch29") || user.contains("jgiga")) {
+                    adventurer.beginAdventure(channel, 3);
+                }
+                break;
+            case "!abort":
+                if (user.contains("glitch29") || user.contains("jgiga")) {
+                    adventurer.endAdventure(channel);
                 }
                 break;
             case "!commands":
@@ -57,7 +69,7 @@ public class HorseBotCommander {
                 messenger.privmsg(channel, "Horse.");
                 break;
             case "!neigh":
-                if (user.contains("glitch29") || user.contains(channel.name)) {
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                    messenger.privmsg(channel, String.format(
                             "It has been %s since %s was last killed by a horse. BibleThump",
                             timeDifference(database.track(HorseBotDatabase.Tracker.DEATHS, channel)),
@@ -66,7 +78,7 @@ public class HorseBotCommander {
                 }
                 break;
             case "!d:":
-                if (user.contains("glitch29") || user.contains(channel.name)) {
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     messenger.privmsg(channel, String.format(
                             "It has been %s since %s brutally murdered a horse. D:",
                             timeDifference(database.track(HorseBotDatabase.Tracker.MURDERS, channel)),

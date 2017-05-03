@@ -1,42 +1,85 @@
 package Adventures.Locations;
 
-import Adventures.Player;
-import HorseDir.Channel;
-import HorseDir.HorseBotMessenger;
+import Adventures.Adventure;
+import Adventures.Commands.Command;
+import Adventures.Players.AdvCharacter;
 
-import java.util.Collection;
 import java.util.Date;
 
 /**
  * Created by Aaron Fisher on 4/26/2017.
  */
 public abstract class AbstractLocation {
+    private static final String COMMANDS = "";
     static final String HORSE = "\uD83D\uDC0E";
-    private HorseBotMessenger messenger;
-    private Channel channel;
+    private Adventure adventure;
     private long endTime;
 
-    AbstractLocation(Channel channel, HorseBotMessenger messenger, long endTime) {
-        this.channel = channel;
-        this.messenger = messenger;
-        this.endTime = endTime;
+    AbstractLocation(Adventure adventure) {
+        this.adventure = adventure;
+        this.endTime = new Date().getTime() + 60L * 1000L;
     }
 
-    public abstract void beginLocation(Collection<Player> players);
-    public abstract boolean canAddPlayer();
-    public abstract void playerCommand(Player player, int button);
-    public abstract void endLocation(AbstractLocation next);
-    public abstract String name();
+    public void command(AdvCharacter character, Command command) {
+        switch (command) {
+            case JOIN:
+                join(character);
+                break;
+            case LOOK:
+                look();
+                break;
+            case REROLL:
+                publicMessage(character.rerollCharacter());
+                break;
+            case RUN:
+                run(character);
+                break;
+            case EMBARK:
+                embark(character);
+                break;
+            case HIDE:
+                hide(character);
+                break;
+            case FIGHT:
+                fight(character);
+                break;
+            case COMMANDS:
+                commands();
+                break;
+        }
+    }
+
+    public void join(AdvCharacter character) {
+
+    }
+
+    abstract void look();
+
+    void run(AdvCharacter character) {
+
+    }
+
+    void embark(AdvCharacter character) {
+
+    }
+
+    void hide(AdvCharacter character) {
+
+    }
+
+    void fight(AdvCharacter character) {
+
+    }
+
+    void commands() {
+
+    }
 
     int secondsLeft() {
         return (int) ((endTime - new Date().getTime()) / 1000);
     }
 
-    void say(String message) {
-        messenger.privmsg(channel,message);
-    }
-
-    String players() {
-        for ()
+    void publicMessage(String message) {
+        adventure.publicMessage(message);
     }
 }

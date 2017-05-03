@@ -1,47 +1,49 @@
 package Adventures.Locations;
 
-import Adventures.Player;
-import HorseDir.Channel;
-import HorseDir.HorseBotMessenger;
+import Adventures.Adventure;
+import Adventures.Players.AdvCharacter;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Created by Aaron Fisher on 4/26/2017.
  */
 public class Tavern extends AbstractLocation {
     private static final String NAME = "the Tavern";
-    private static final String BEGIN = "Press " + HORSE + " to enter " + NAME + " and join the adventuring party.";
+    private static final String BEGIN = "Press " + HORSE + "JOIN to enter " + NAME + " and join the adventure.";
+    private static final String LOOK = "You are in " + NAME + ". It's description hasn't been fleshed out much.";
     private static final String TIMING = "The adventure begins in %d seconds.";
+    private static final String TOO_SMALL = "The party must have at least 3 members to proceed.";
     private static final String EMBARK = "The party is complete. %s set off on toward %s.";
+    private Set<AdvCharacter> party;
 
-    public Tavern(Channel channel, HorseBotMessenger messenger, long endTime) {
-        super(channel, messenger, endTime);
+    public Tavern(Adventure adventure) {
+        super(adventure);
+        party = new HashSet<>();
+        publicMessage(BEGIN);
+        publicMessage(String.format(TIMING, 30));
     }
 
     @Override
-    public void beginLocation(Collection<Player> players) {
-        say(BEGIN);
-        say(String.format(TIMING,secondsLeft()));
+    public void join(AdvCharacter character) {
+        if (party.add(character)) {
+            publicMessage(character.joinMessage());
+        }
     }
 
     @Override
-    public boolean canAddPlayer() {
-        return true;
+    public void embark(AdvCharacter character) {
+        if (party.contains(character)) {
+            if (party.size() < 3) {
+                publicMessage(TOO_SMALL);
+                return;
+            }
+            publicMessage(String.format(EMBARK, "[PARTY MEMBERS]", "[NEXT LOCATION]"));
+        }
     }
 
     @Override
-    public void playerCommand(Player player, int button) {
-
-    }
-
-    @Override
-    public void endLocation(AbstractLocation next) {
-        say(String.format(EMBARK, players(), next.name()));
-    }
-
-    @Override
-    public String name() {
-        return NAME;
+    public void look() {
+        publicMessage(LOOK);
     }
 }
