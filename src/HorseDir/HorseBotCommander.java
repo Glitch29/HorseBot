@@ -22,6 +22,10 @@ public class HorseBotCommander {
         database.log(channel + " " + new Date().getTime() + " " + user + " " + body);
         switch (scanner.next().toLowerCase()) {
             case "!horse":
+                if (channel.nick.equals("Lolo")) {
+                    return;
+                }
+            case "!horse2":
                 messenger.privmsg(channel, String.format(
                         "It has been %s since %s was last killed by a horse. \uD83D\uDC0E",
                         timeDifference(database.read(HorseBotDatabase.Tracker.DEATHS, channel)),
@@ -54,7 +58,7 @@ public class HorseBotCommander {
                 }
                 break;
             case "!abort":
-                if (user.contains("glitch29") || user.contains("jgiga")) {
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     adventurer.endAdventure(channel);
                 }
                 break;
