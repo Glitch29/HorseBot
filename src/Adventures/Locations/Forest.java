@@ -40,7 +40,7 @@ public class Forest extends AbstractLocation{
     void run(AdvCharacter character) {
         party.remove(character);
         runners.add(character);
-        if (party.size() == 1) {
+        if (party.size() <= runners.size() / 3 + 1) {
             for (AdvCharacter slowpoke : party) {
                 kill(slowpoke, Death.LastToRun);
             }
