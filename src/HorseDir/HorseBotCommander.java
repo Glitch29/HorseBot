@@ -1,5 +1,9 @@
 package HorseDir;
 
+import WorldRecords.Category;
+import WorldRecords.RecordLookup;
+import WorldRecords.Restriction;
+
 import java.util.Date;
 import java.util.Scanner;
 
@@ -45,15 +49,20 @@ public class HorseBotCommander {
                     messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
                 }
                 break;
-            case "!wr":
-                messenger.privmsg(channel, String.format(
-                        "%s doesn't need world record to be proud of his or her accomplishments. What are you implying %s?",
-                        channel.nick,
-                        user
-                ));
+            case "!ad":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.AD));
+                break;
+            case "!any%":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.Any));
+                break;
+            case "!ad-a":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.AD, Restriction.Amiiboless));
+                break;
+            case "!any%-a":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.Any, Restriction.Amiiboless));
                 break;
             case "!adventure":
-                if (user.contains("glitch29") || user.contains("jgiga")) {
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     adventurer.beginAdventure(channel, 3);
                 }
                 break;
