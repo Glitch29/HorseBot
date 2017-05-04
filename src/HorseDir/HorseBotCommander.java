@@ -55,11 +55,17 @@ public class HorseBotCommander {
             case "!any%":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.Any));
                 break;
+            case "!amq":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.AMQ));
+                break;
             case "!ad-a":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.AD, Restriction.Amiiboless));
                 break;
             case "!any%-a":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.Any, Restriction.Amiiboless));
+                break;
+            case "!amq-a":
+                messenger.privmsg(channel, RecordLookup.leaderboard(Category.AMQ, Restriction.Amiiboless));
                 break;
             case "!adventure":
                 if (user.contains("glitch29") || user.contains(channel.broadcaster)) {

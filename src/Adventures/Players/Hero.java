@@ -5,24 +5,24 @@ import Adventures.Deaths.Death;
 /**
  * Created by Aaron Fisher on 5/1/2017.
  */
-public class AdvCharacter {
+public class Hero {
     private static final String INTRODUCTION = "%s, the lvl 1 %s has joined the adventure. They will be played by %s.";
     private static final String REROLL = "%s has rerolled into %s, the lvl 1 %s.";
     private static final String NO_REROLL = "%s is out of rerolls, and is stuck as %s.";
     public Player player;
-    private CharacterName characterName;
-    private CharacterClass characterClass;
+    private HeroName heroName;
+    private HeroClass heroClass;
     private int rerolls = 2;
 
-    public AdvCharacter(Player player) {
+    public Hero(Player player) {
         this.player = player;
         reroll();
     }
 
     public String joinMessage() {
         return String.format(INTRODUCTION,
-                characterName,
-                characterClass,
+                heroName,
+                heroClass,
                 player.username);
     }
 
@@ -32,18 +32,18 @@ public class AdvCharacter {
             reroll();
             return String.format(REROLL,
                     player.username,
-                    characterName,
-                    characterClass);
+                    heroName,
+                    heroClass);
         } else {
             return String.format(NO_REROLL,
                     player.username,
-                    characterName);
+                    heroName);
         }
     }
 
     private void reroll() {
-        characterName = CharacterName.randomName();
-        characterClass = CharacterClass.randomClass();
+        heroName = HeroName.randomName();
+        heroClass = HeroClass.randomClass();
     }
 
     public void kill(Death death) {
@@ -52,6 +52,6 @@ public class AdvCharacter {
 
     @Override
     public String toString() {
-        return characterName.toString();
+        return heroName.toString();
     }
 }

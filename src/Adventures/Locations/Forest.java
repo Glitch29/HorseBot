@@ -2,7 +2,7 @@ package Adventures.Locations;
 
 import Adventures.Adventure;
 import Adventures.Deaths.Death;
-import Adventures.Players.AdvCharacter;
+import Adventures.Players.Hero;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,11 +19,11 @@ public class Forest extends AbstractLocation{
             "suggest that you " + HORSE + "RUN.";
     private static final String READY = "As the bear drags off the carcass, %s regathers the group. They may choose " +
             "when to " + HORSE + "EMBARK.";
-    private Set<AdvCharacter> party;
-    private Set<AdvCharacter> runners;
-    private AdvCharacter leader;
+    private Set<Hero> party;
+    private Set<Hero> runners;
+    private Hero leader;
 
-    public Forest(Adventure adventure, Set<AdvCharacter> characters) {
+    public Forest(Adventure adventure, Set<Hero> characters) {
         super(adventure);
         party = characters;
         runners = new HashSet<>();
@@ -37,11 +37,11 @@ public class Forest extends AbstractLocation{
     }
 
     @Override()
-    void run(AdvCharacter character) {
+    void run(Hero character) {
         party.remove(character);
         runners.add(character);
         if (party.size() <= runners.size() / 3 + 1) {
-            for (AdvCharacter slowpoke : party) {
+            for (Hero slowpoke : party) {
                 kill(slowpoke, Death.LastToRun);
             }
             leader = randomCharacter(new ArrayList<>(runners));
@@ -50,7 +50,7 @@ public class Forest extends AbstractLocation{
     }
 
     @Override
-    void embark(AdvCharacter character) {
+    void embark(Hero character) {
         if (character == leader) {
             advanceLocation(new Victory(adventure, runners));
         }

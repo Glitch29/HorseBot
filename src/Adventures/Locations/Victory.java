@@ -1,7 +1,7 @@
 package Adventures.Locations;
 
 import Adventures.Adventure;
-import Adventures.Players.AdvCharacter;
+import Adventures.Players.Hero;
 
 import java.util.Set;
 
@@ -13,11 +13,11 @@ public class Victory extends AbstractLocation {
     private static final String LOOK = "You look around, and see the end of the narrative in every direction. The adventure is over.";
     private String survivors;
 
-    public Victory(Adventure adventure, Set<AdvCharacter> characters) {
+    public Victory(Adventure adventure, Set<Hero> characters) {
         super(adventure);
         publicMessage(ARRIVE);
         survivors = "";
-        for (AdvCharacter character : characters) {
+        for (Hero character : characters) {
             survivors = survivors + character + ", ";
         }
     }

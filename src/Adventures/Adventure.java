@@ -4,7 +4,7 @@ import Adventures.Commands.Command;
 import Adventures.Deaths.Death;
 import Adventures.Locations.AbstractLocation;
 import Adventures.Locations.Tavern;
-import Adventures.Players.AdvCharacter;
+import Adventures.Players.Hero;
 import Adventures.Players.Player;
 import HorseDir.Channel;
 import HorseDir.HorseBotMessenger;
@@ -18,7 +18,7 @@ import java.util.*;
 public class Adventure {
     private Channel channel;
     private long endTime;
-    private Map<Player, AdvCharacter> playerMap;
+    private Map<Player, Hero> playerMap;
     private List<Player> timeOutList;
     private AbstractLocation location;
     private HorseBotMessenger messenger;
@@ -35,7 +35,7 @@ public class Adventure {
     public void command(Privmsg message) {
         Player player = new Player(message.channel, message.user);
         if (!playerMap.containsKey(player)) {
-            playerMap.put(player, new AdvCharacter(player));
+            playerMap.put(player, new Hero(player));
         }
         try {
             Command command = Command.valueOf(message.body.substring(2).toUpperCase());
@@ -61,11 +61,11 @@ public class Adventure {
         messenger.privmsg(channel, message);
     }
 
-    public void whisper(AdvCharacter character, String message) {
+    public void whisper(Hero character, String message) {
         messenger.privmsg(channel, "/w " + character.player.username + " " + message);
     }
 
-    public void kill(AdvCharacter character, Death death) {
+    public void kill(Hero character, Death death) {
         publicMessage(String.format(death.message, character) + " AngelThump");
         publicMessage("/timeout " + character.player.username);
         whisper(character, "You are dead. :-(");

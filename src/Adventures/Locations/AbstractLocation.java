@@ -3,7 +3,7 @@ package Adventures.Locations;
 import Adventures.Adventure;
 import Adventures.Commands.Command;
 import Adventures.Deaths.Death;
-import Adventures.Players.AdvCharacter;
+import Adventures.Players.Hero;
 
 import java.util.Date;
 import java.util.List;
@@ -24,7 +24,7 @@ public abstract class AbstractLocation {
         this.endTime = new Date().getTime() + 60L * 1000L;
     }
 
-    public void command(AdvCharacter character, Command command) {
+    public void command(Hero character, Command command) {
         switch (command) {
             case JOIN:
                 join(character);
@@ -53,25 +53,25 @@ public abstract class AbstractLocation {
         }
     }
 
-    public void join(AdvCharacter character) {
+    public void join(Hero character) {
 
     }
 
     abstract void look();
 
-    void run(AdvCharacter character) {
+    void run(Hero character) {
 
     }
 
-    void embark(AdvCharacter character) {
+    void embark(Hero character) {
 
     }
 
-    void hide(AdvCharacter character) {
+    void hide(Hero character) {
 
     }
 
-    void fight(AdvCharacter character) {
+    void fight(Hero character) {
 
     }
 
@@ -79,7 +79,7 @@ public abstract class AbstractLocation {
 
     }
 
-    void kill(AdvCharacter character, Death death) {
+    void kill(Hero character, Death death) {
         adventure.kill(character, death);
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractLocation {
         adventure.publicMessage(message);
     }
 
-    AdvCharacter randomCharacter(List<AdvCharacter> characters) {
+    Hero randomCharacter(List<Hero> characters) {
         return characters.get(RANDOM.nextInt(characters.size()));
     }
 
