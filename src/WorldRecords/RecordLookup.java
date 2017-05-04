@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Scanner;
 
-
 import static WorldRecords.Category.AD;
+import static WorldRecords.Category.Any;
+import static java.lang.Boolean.FALSE;
 
 /**
  * Created by Aaron Fisher on 5/3/2017.
@@ -48,7 +48,7 @@ public class RecordLookup {
                             category.game.name,
                             modifiers,
                             category.name,
-                            formatTime(run.getJSONObject("times").getString("realtime")),
+                            formatTime(run.getJSONObject("times").getInt("realtime_t"), FALSE),
                             findPlayer(run.getJSONArray("players").getJSONObject(0).getString("id")));
 
                 }
@@ -69,8 +69,11 @@ public class RecordLookup {
         return names.getString("international");
     }
 
-    private static String formatTime(String uglyTime) {
-        return uglyTime.replace("PT","").replace("H",":").replace("M",":").replace("S","");
+    private static String formatTime(int time, boolean padded) {
+        if (time > 59) {
+            return formatTime(time / 60, false) + ":" + formatTime(time % 60, true);
+        }
+        return (time < 10 && padded ? "0" : "") + Integer.toString(time, 10);
     }
 
     @Test
