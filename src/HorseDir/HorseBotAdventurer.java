@@ -19,9 +19,9 @@ public class HorseBotAdventurer {
         adventureMap = new HashMap<>();
     }
 
-    public void beginAdventure(Channel channel, int minutes) {
+    public void beginAdventure(Channel channel) {
         endAdventure(channel);
-        adventureMap.put(channel, new Adventure(channel, minutes, messenger));
+        adventureMap.put(channel, new Adventure(channel, messenger));
     }
 
     public void endAdventure(Channel channel) {

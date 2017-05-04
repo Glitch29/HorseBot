@@ -17,15 +17,14 @@ import java.util.*;
  */
 public class Adventure {
     private Channel channel;
-    private long endTime;
     private Map<Player, Hero> playerMap;
     private List<Player> timeOutList;
     private AbstractLocation location;
     private HorseBotMessenger messenger;
+    private boolean ended = false;
 
-    public Adventure (Channel channel, int minutes, HorseBotMessenger messenger) {
+    public Adventure (Channel channel, HorseBotMessenger messenger) {
         this.channel = channel;
-        this.endTime = new Date().getTime() + (minutes * 60 * 1000);
         this.messenger = messenger;
         playerMap = new HashMap<>();
         timeOutList = new ArrayList<>();
@@ -33,7 +32,13 @@ public class Adventure {
     }
 
     public void command(Privmsg message) {
+        if (ended) {
+            return;
+        }
         Player player = new Player(message.channel, message.user);
+        if (timeOutList.contains(player)) {
+            return;
+        }
         if (!playerMap.containsKey(player)) {
             playerMap.put(player, new Hero(player));
         }
@@ -47,10 +52,13 @@ public class Adventure {
 
     public void advanceLocation(AbstractLocation location) {
         this.location = location;
-
     }
 
     public void end() {
+        if (ended) {
+            return;
+        }
+        ended = true;
         publicMessage("The adventure has ended. All deceased players have had their chat privileges restored.");
         for (Player player : timeOutList) {
             publicMessage("/unban " + player.username);

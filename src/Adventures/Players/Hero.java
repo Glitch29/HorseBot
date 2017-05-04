@@ -1,7 +1,5 @@
 package Adventures.Players;
 
-import Adventures.Deaths.Death;
-
 /**
  * Created by Aaron Fisher on 5/1/2017.
  */
@@ -44,10 +42,6 @@ public class Hero {
     private void reroll() {
         heroName = HeroName.randomName();
         heroClass = HeroClass.randomClass();
-    }
-
-    public void kill(Death death) {
-
     }
 
     @Override
