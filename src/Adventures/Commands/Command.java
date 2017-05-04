@@ -7,10 +7,11 @@ public enum Command {
     JOIN,
     LOOK,
     REROLL,
-    COMMANDS,
     RUN,
     HIDE,
     EMBARK,
+    LEAP,
+    TALK,
     FIGHT;
 
     public String toString() {

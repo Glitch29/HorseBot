@@ -80,7 +80,8 @@ public class HorseBotDatabase {
 
     public enum Tracker {
         DEATHS ("DeathLog.txt"),
-        MURDERS ("MurderLog.txt");
+        MURDERS ("MurderLog.txt"),
+        LEVEL_UPS ("AdventureLog.txt");
 
         String fileName;
         Tracker(String fileName) {

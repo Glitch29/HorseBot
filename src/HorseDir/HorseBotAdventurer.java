@@ -1,7 +1,6 @@
 package HorseDir;
 
 import Adventures.Adventure;
-import Adventures.Commands.Command;
 import MessageLines.Privmsg;
 
 import java.util.HashMap;
