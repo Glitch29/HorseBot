@@ -1,7 +1,7 @@
 package Adventures.Locations;
 
 import Adventures.Adventure;
-import Adventures.Players.AdvCharacter;
+import Adventures.Players.Hero;
 
 import java.util.*;
 
@@ -19,8 +19,8 @@ public class Tavern extends AbstractLocation {
     private static final String READY = "Several adventurers have now converged at " + NAME + ". %s is clearly %s " +
             "of the lot, and has emerged as a leader. They alone will decide when to " + HORSE + "EMBARK.";
     private static final String EMBARK = "The party is complete. %s set off on toward %s.";
-    private Set<AdvCharacter> party;
-    private AdvCharacter leader;
+    private Set<Hero> party;
+    private Hero leader;
 
     public Tavern(Adventure adventure) {
         super(adventure);
@@ -30,7 +30,7 @@ public class Tavern extends AbstractLocation {
     }
 
     @Override
-    public void join(AdvCharacter character) {
+    public void join(Hero character) {
         if (party.add(character)) {
             publicMessage(character.joinMessage());
             if (party.size() >= MIN_PARTY_SIZE && leader == null) {
@@ -40,7 +40,7 @@ public class Tavern extends AbstractLocation {
     }
 
     @Override
-    public void embark(AdvCharacter character) {
+    public void embark(Hero character) {
         if (party.contains(character)) {
             if (party.size() < 3) {
                 publicMessage(TOO_SMALL);

@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * Created by Aaron Fisher on 5/1/2017.
  */
-public enum CharacterName {
+public enum HeroName {
     Edwin,
     Gwendolyn,
     William,
@@ -43,7 +43,7 @@ public enum CharacterName {
 
     private static final Random random = new Random(new Date().getTime());
 
-    static CharacterName randomName() {
-        return CharacterName.values()[random.nextInt(CharacterName.values().length)];
+    static HeroName randomName() {
+        return HeroName.values()[random.nextInt(HeroName.values().length)];
     }
 }

@@ -5,7 +5,8 @@ package WorldRecords;
  */
 public enum Category {
     AD ("All Dungeons","9d8jgv7k", Game.BotW),
-    Any ("Any%", "vdoq4xvk", Game.BotW);
+    Any ("Any%", "vdoq4xvk", Game.BotW),
+    AMQ ("All Main Quests", "n2yj3r82", Game.BotW);
 
     String name;
     String code;

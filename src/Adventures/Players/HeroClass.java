@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * Created by Aaron Fisher on 4/29/2017.
  */
-public enum CharacterClass {
+public enum HeroClass {
     Cobbler,
     Gardener,
     Wordsmith,
@@ -60,17 +60,17 @@ public enum CharacterClass {
     Gumshoe;
 
     String name;
-    CharacterClass(String name) {
+    HeroClass(String name) {
         this.name = name;
     }
-    CharacterClass() {
+    HeroClass() {
         this.name = this.toString();
     }
 
     private static final Random random = new Random(new Date().getTime());
 
-    static CharacterClass randomClass() {
-        return CharacterClass.values()[random.nextInt(CharacterClass.values().length)];
+    static HeroClass randomClass() {
+        return HeroClass.values()[random.nextInt(HeroClass.values().length)];
     }
 
 }
