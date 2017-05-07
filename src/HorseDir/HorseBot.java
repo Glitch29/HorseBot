@@ -18,6 +18,7 @@ public class HorseBot {
     private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
     private static Account ACCOUNT = new HorseBotXD();
     private static final List<Channel> CHANNELS = new ArrayList<>();
+    private static String LAST_ENDER = "d";
     static {
         try (Scanner scanner = new Scanner(new File(DIRECTORY + CHANNEL_LIST))) {
             while (scanner.hasNext()) {
@@ -52,6 +53,18 @@ public class HorseBot {
                     Privmsg privmsg = listener.readPrivmsg();
                     if (privmsg.body.charAt(0) == '!') {
                         commander.command(privmsg.user, privmsg.channel, privmsg.body);
+                    }
+                    if (privmsg.user.equals("disbotdoh") && privmsg.body.startsWith("If ")) {
+                        messenger.privmsg(privmsg.channel, "Or not. Your choice. \uD83D\uDC0E");
+                    }
+                    if (privmsg.user.equals("spadespwnzbot") && privmsg.body.contains("if your enjoying")) {
+                        messenger.privmsg(privmsg.channel, "FailFish if *you're* enjoying the stream. \uD83D\uDC0E");
+                    }
+                    if (privmsg.user.equals("enderjp")) {
+                        if (privmsg.body.contains(LAST_ENDER + " " + LAST_ENDER)) {
+                            messenger.privmsg(privmsg.channel, "HORSEBOT SAYS NO!");
+                        }
+                        LAST_ENDER = privmsg.body;
                     }
                     if (privmsg.body.contains("\uD83D\uDC0E")) {
                         adventurer.command(privmsg);

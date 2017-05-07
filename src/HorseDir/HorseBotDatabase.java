@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by Aaron Fisher on 4/30/2017.
@@ -58,6 +55,18 @@ public class HorseBotDatabase {
         }
     }
 
+    public String latestKey(Tracker tracker) {
+        long max = Long.MIN_VALUE;
+        String key = "";
+        for (Map.Entry<String,Long> entry : readTracker(tracker).entrySet()) {
+            if (entry.getValue() > max) {
+                max = entry.getValue();
+                key = entry.getKey();
+            }
+        }
+        return key;
+    }
+
     private Map<String, Long> readTracker(Tracker tracker) {
         if (!TRACKER_MAP.containsKey(tracker)) {
             TRACKER_MAP.put(tracker, loadTracker(tracker));
@@ -81,6 +90,7 @@ public class HorseBotDatabase {
     public enum Tracker {
         DEATHS ("DeathLog.txt"),
         MURDERS ("MurderLog.txt"),
+        SEALS ("SealLog.txt"),
         LEVEL_UPS ("AdventureLog.txt");
 
         String fileName;

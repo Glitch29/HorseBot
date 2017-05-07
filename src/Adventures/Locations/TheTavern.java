@@ -9,7 +9,7 @@ import java.util.*;
  * Created by Aaron Fisher on 4/26/2017.
  */
 public class TheTavern extends AbstractLocation {
-    private static final int MIN_PARTY_SIZE = 6;
+    private static final int MIN_PARTY_SIZE = 3;
     private static final String NAME = "the Tavern";
     private static final String BEGIN = "Press " + HORSE + "JOIN to enter " + NAME + " and join the adventure.";
     private static final String LOOK = "You are in " + NAME + ". It's description hasn't been fleshed out much.";
@@ -50,14 +50,7 @@ public class TheTavern extends AbstractLocation {
             publicMessage(String.format(EMBARK,
                     party.size() + " adventurers",
                     "the forest"));
-            advanceLocation(new TheGypsy(adventure, party, TheGypsy.GypsyType.HERMIT));
-        } else {
-            if (hero.player.username.equals("glitch29")) {
-                publicMessage(String.format(EMBARK,
-                        party.size() + " adventurers",
-                        "the forest"));
-                advanceLocation(new TheGypsy(adventure, party, TheGypsy.GypsyType.HERMIT));
-            }
+            advanceLocation(new TheGypsy(adventure, party, TheGypsy.GypsyType.PRANKSTER));
         }
     }
 
