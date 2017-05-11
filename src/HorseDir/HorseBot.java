@@ -18,6 +18,7 @@ public class HorseBot {
     private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
     private static Account ACCOUNT = new HorseBotXD();
     private static final List<Channel> CHANNELS = new ArrayList<>();
+    private static String LAST_ENDER = "d";
     static {
         try (Scanner scanner = new Scanner(new File(DIRECTORY + CHANNEL_LIST))) {
             while (scanner.hasNext()) {
@@ -47,11 +48,34 @@ public class HorseBot {
             switch (listener.classify()) {
                 case PING:
                     messenger.pong(listener.readPing());
+                    messenger.privmsg(Channel.get("#spades_live"), "!points");
                     break;
                 case PRIVMSG:
                     Privmsg privmsg = listener.readPrivmsg();
                     if (privmsg.body.charAt(0) == '!') {
                         commander.command(privmsg.user, privmsg.channel, privmsg.body);
+                    }
+                    if (privmsg.user.equals("disbotdoh") && privmsg.body.startsWith("If ")) {
+                        messenger.privmsg(privmsg.channel, "Or not. Your choice. \uD83D\uDC0E");
+                    }
+                    if (privmsg.user.equals("spadespwnzbot") && privmsg.body.contains("if your enjoying")) {
+                        messenger.privmsg(privmsg.channel, "http://writingexplained.org/your-vs-youre-difference \uD83D\uDC0E");
+                    }
+                    if (privmsg.user.equals("spadespwnzbot") && privmsg.body.substring(0, 6).equals("@horse")) {
+                        try (Scanner scanner = new Scanner(privmsg.body)) {
+                            if (scanner.hasNext()) {
+                                System.out.println(scanner.next());
+                            }
+                            if (scanner.hasNextInt()) {
+                                messenger.privmsg(Channel.get("#spades_live"), "!cgss " + (scanner.nextInt() / 40));
+                            }
+                        }
+                    }
+                    if (privmsg.user.equals("enderjp")) {
+                        if (privmsg.body.contains(LAST_ENDER + " " + LAST_ENDER)) {
+                            messenger.privmsg(privmsg.channel, "HORSEBOT SAYS NO!");
+                        }
+                        LAST_ENDER = privmsg.body;
                     }
                     if (privmsg.body.contains("\uD83D\uDC0E")) {
                         adventurer.command(privmsg);

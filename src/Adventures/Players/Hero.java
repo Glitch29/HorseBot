@@ -8,8 +8,8 @@ public class Hero {
     private static final String REROLL = "%s has rerolled into %s, the lvl 1 %s.";
     private static final String NO_REROLL = "%s is out of rerolls, and is stuck as %s.";
     public Player player;
-    private HeroName heroName;
-    private HeroClass heroClass;
+    public HeroName heroName;
+    public HeroClass heroClass;
     private int rerolls = 2;
 
     public Hero(Player player) {

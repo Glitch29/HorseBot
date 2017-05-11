@@ -49,7 +49,7 @@ public class RecordLookup {
                 JSONObject run = runs.getJSONObject(i).getJSONObject("run");
                 boolean restricted = false;
                 for (Restriction restriction : restrictions) {
-                    if (run.getJSONObject("values").getString(restriction.key).equals(restriction.value)) {
+                    if (getString(run, restriction.key).equals(restriction.value) != restriction.match) {
                         restricted = true;
                     }
                 }
@@ -177,7 +177,7 @@ public class RecordLookup {
 
     @Test
     public void testAmiibolessAMQ() {
-        System.out.println(leaderboard(AMQ, Restriction.Amiiboless));
+        System.out.println(leaderboard(AMQ, Restriction.USA));
     }
 
     @Test

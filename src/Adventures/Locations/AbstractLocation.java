@@ -5,94 +5,113 @@ import Adventures.Commands.Command;
 import Adventures.Deaths.Death;
 import Adventures.Players.Hero;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Aaron Fisher on 4/26/2017.
  */
 public abstract class AbstractLocation {
     private static final Random RANDOM = new Random(new Date().getTime());
-    private static final String COMMANDS = "";
     static final String HORSE = "\uD83D\uDC0E";
     Adventure adventure;
-    private long endTime;
 
     AbstractLocation(Adventure adventure) {
         this.adventure = adventure;
-        this.endTime = new Date().getTime() + 60L * 1000L;
     }
 
-    public void command(Hero character, Command command) {
+    public void command(Hero hero, Command command) {
         switch (command) {
             case JOIN:
-                join(character);
+                join(hero);
                 break;
             case LOOK:
-                look();
+                look(hero);
                 break;
             case REROLL:
-                publicMessage(character.rerollCharacter());
+                publicMessage(hero.rerollCharacter());
                 break;
             case RUN:
-                run(character);
+                run(hero);
                 break;
             case EMBARK:
-                embark(character);
+                embark(hero);
                 break;
             case HIDE:
-                hide(character);
+                hide(hero);
                 break;
             case FIGHT:
-                fight(character);
+                fight(hero);
                 break;
-            case COMMANDS:
-                commands();
+            case LEAP:
+                leap(hero);
+                break;
+            case TALK:
+                talk(hero);
                 break;
         }
     }
 
-    public void join(Hero character) {
+    public void join(Hero hero) {
+        publicMessage(String.format("%s shows up at the Tavern to find that everyone has already left.", hero));
+        adventure.kill(Death.Lonely, hero);
+    }
+
+    void look(Hero hero) {
+        whisper(hero, "You look around, but there's nothing much to see.");
+    }
+
+    void run(Hero hero) {
 
     }
 
-    abstract void look();
-
-    void run(Hero character) {
+    void embark(Hero hero) {
 
     }
 
-    void embark(Hero character) {
+    void hide(Hero hero) {
 
     }
 
-    void hide(Hero character) {
+    void fight(Hero hero) {
 
     }
 
-    void fight(Hero character) {
+    void leap(Hero hero) {
 
     }
 
-    void commands() {
+    void talk(Hero hero) {
 
     }
 
-    void kill(Hero character, Death death) {
-        adventure.kill(character, death);
+    void kill(Death death, Hero... heroes) {
+        adventure.kill(death, heroes);
     }
 
     void advanceLocation(AbstractLocation location) {
         adventure.advanceLocation(location);
     }
 
-    int secondsLeft() {
-        return (int) ((endTime - new Date().getTime()) / 1000);
-    }
-
     void publicMessage(String message) {
         adventure.publicMessage(message);
+    }
+
+    void whisper(Hero hero, String message) {
+        adventure.whisper(hero, message);
+    }
+
+    String heroNames(Collection<Hero> heroes) {
+        StringBuilder names = new StringBuilder();
+        for (Hero hero : heroes) {
+            names.append(hero.heroName + ", ");
+        }
+        return names.toString();
+    }
+
+    Hero chooseLeader(Collection<Hero> heroes) {
+        Hero leader = randomCharacter(new ArrayList<>(heroes));
+        whisper(leader, "You are the new leader. Type " + HORSE + "EMBARK when you are ready to leave this location.");
+        return leader;
     }
 
     Hero randomCharacter(List<Hero> characters) {
@@ -100,18 +119,20 @@ public abstract class AbstractLocation {
     }
 
     String randomReason() {
-        int i = RANDOM.nextInt(5);
+        int i = RANDOM.nextInt(6);
         switch (i) {
             case 0:
-                return "the most trustworthy";
+                return "most trustworthy";
             case 1:
-                return "the strongest";
+                return "strongest";
             case 2:
-                return "the wisest";
+                return "wisest";
             case 3:
-                return "the most beautiful";
+                return "most beautiful";
+            case 4:
+                return "most courageous";
             default:
-                return "the most charismatic";
+                return "most charismatic";
         }
     }
 }

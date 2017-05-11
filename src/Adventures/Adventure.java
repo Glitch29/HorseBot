@@ -3,7 +3,7 @@ package Adventures;
 import Adventures.Commands.Command;
 import Adventures.Deaths.Death;
 import Adventures.Locations.AbstractLocation;
-import Adventures.Locations.Tavern;
+import Adventures.Locations.TheTavern;
 import Adventures.Players.Hero;
 import Adventures.Players.Player;
 import HorseDir.Channel;
@@ -28,7 +28,7 @@ public class Adventure {
         this.messenger = messenger;
         playerMap = new HashMap<>();
         timeOutList = new ArrayList<>();
-        location = new Tavern(this);
+        location = new TheTavern(this);
     }
 
     public void command(Privmsg message) {
@@ -73,11 +73,13 @@ public class Adventure {
         messenger.privmsg(channel, "/w " + character.player.username + " " + message);
     }
 
-    public void kill(Hero character, Death death) {
-        publicMessage(String.format(death.message, character) + " AngelThump");
-        publicMessage("/timeout " + character.player.username);
-        whisper(character, "You are dead. :-(");
-        playerMap.remove(character.player);
-        timeOutList.add(character.player);
+    public void kill(Death death, Hero... heroes) {
+        for (Hero hero : heroes) {
+            publicMessage(String.format(death.message, hero));
+            publicMessage("/timeout " + hero.player.username);
+            whisper(hero, "You are dead. :-(");
+            playerMap.remove(hero.player);
+            timeOutList.add(hero.player);
+        }
     }
 }
