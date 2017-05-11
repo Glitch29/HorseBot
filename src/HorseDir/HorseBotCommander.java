@@ -88,7 +88,7 @@ public class HorseBotCommander {
                         System.out.println(next);
                         Channel believe = Channel.get("#" + next);
                         messenger.privmsg(believe, String.format(
-                                "HorseBot is trying to believe in you, %s! \uD83D\uDC0E",
+                                "HorseBot is trying to believe in you, %s! Sometimes it's a hard thing to do. \uD83D\uDC0E",
                                 believe.nick
                         ));
                     }
@@ -113,6 +113,9 @@ public class HorseBotCommander {
                         channel.nick
                 ));
                 break;
+            case "!cryosisstrats":
+                messenger.privmsg(channel, "https://www.youtube.com/watch?v=lzykoWSZ8TQ&list=PL7bccJYa7qUVbgbaC0inZOl-cYarjSrZm");
+                break;
             case "!panic":
                 if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     messenger.privmsg(channel, "The stream! panicBasket The stream! panicBasket The stream is on fire!");
@@ -125,7 +128,7 @@ public class HorseBotCommander {
                 }
                 break;
             case "!wr":
-                messenger.privmsg(channel, "!ad, !any%, !amq, !as, !ms, !ad-a, !any%-a, !amq-a, !as-a, !ms-a, !ad-a+us");
+                messenger.privmsg(channel, "!ad, !any%, !amq, !as, !ms, !ad-a, !any%-a, !amq-a, !as-a, !ms-a, !ad-a-na");
                 break;
             case "!ad":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.AD));
@@ -160,7 +163,7 @@ public class HorseBotCommander {
             case "!ms-a":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.MS, Restriction.Amiiboless));
                 break;
-            case "!ad-a+us":
+            case "!ad-a-na":
                 messenger.privmsg(channel, RecordLookup.leaderboard(Category.AD, Restriction.Amiiboless, Restriction.USA));
                 break;
             case "!pb":
@@ -195,9 +198,6 @@ public class HorseBotCommander {
                 } else {
                     messenger.privmsg(channel, StreamerFact.fact(channel) + " 4Head");
                 }
-                break;
-            case "!who's":
-                messenger.privmsg(channel, "Horse.");
                 break;
             case "!neigh":
                 if (user.contains("glitch29") || user.contains(channel.broadcaster)) {

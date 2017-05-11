@@ -48,6 +48,7 @@ public class HorseBot {
             switch (listener.classify()) {
                 case PING:
                     messenger.pong(listener.readPing());
+                    messenger.privmsg(Channel.get("#spades_live"), "!points");
                     break;
                 case PRIVMSG:
                     Privmsg privmsg = listener.readPrivmsg();
@@ -58,7 +59,17 @@ public class HorseBot {
                         messenger.privmsg(privmsg.channel, "Or not. Your choice. \uD83D\uDC0E");
                     }
                     if (privmsg.user.equals("spadespwnzbot") && privmsg.body.contains("if your enjoying")) {
-                        messenger.privmsg(privmsg.channel, "FailFish if *you're* enjoying the stream. \uD83D\uDC0E");
+                        messenger.privmsg(privmsg.channel, "http://writingexplained.org/your-vs-youre-difference \uD83D\uDC0E");
+                    }
+                    if (privmsg.user.equals("spadespwnzbot") && privmsg.body.substring(0, 6).equals("@horse")) {
+                        try (Scanner scanner = new Scanner(privmsg.body)) {
+                            if (scanner.hasNext()) {
+                                System.out.println(scanner.next());
+                            }
+                            if (scanner.hasNextInt()) {
+                                messenger.privmsg(Channel.get("#spades_live"), "!cgss " + (scanner.nextInt() / 40));
+                            }
+                        }
                     }
                     if (privmsg.user.equals("enderjp")) {
                         if (privmsg.body.contains(LAST_ENDER + " " + LAST_ENDER)) {

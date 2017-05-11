@@ -5,7 +5,8 @@ package WorldRecords;
  */
 public enum Restriction {
     Amiiboless ("9qj24o31","Amiiboless", false, "values", "e8m0zxl6"),
-    USA ("pr184lqn", "USA Only", true, "system", "region");
+    USA ("pr184lqn", "USA/NTSC", true, "system", "region");
+//    NA ("region", "pr184lqn", true, "system", )
     String[] key;
     String value;
     String description;

@@ -41,14 +41,14 @@ public class HorseFact {
             "H-O-R-S-E is a basketball variant played by 2 or more players. It involves alternating players taking " +
                     "a shot with their choice of style and location which, if successful, their opponents must " +
                     "attempt to reproduce.",
-            "Knock, knock.",
             "4 out of 5 horses recommend Colgate.",
             "In the 16th century, “horse” was a common adjective describing anything strong, big, or coarse. Along " +
                     "with horseplay, that’s how horseradish got its name.",
             "The Canada horse, commonly referred to as møøse, is the single most frequent cause of automobile " +
                     "accidents in lumberjack country.",
             "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to " +
-                    "the research, please type !addfact <your fact>. \uD83D\uDC0E"
+                    "the research, please type !addfact <your fact>. \uD83D\uDC0E",
+            "The secret code is ⬆⬆⬇⬇⬅➡⬅➡\uD83C\uDD71\uD83C\uDD70."
             ));
 
     public static String fact() {
@@ -56,6 +56,6 @@ public class HorseFact {
     }
 
     public static String fact(int i) {
-        return HORSE_FACTS.get(i);
+        return HORSE_FACTS.get(i % HORSE_FACTS.size());
     }
 }
