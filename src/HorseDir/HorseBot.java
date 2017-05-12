@@ -72,8 +72,10 @@ public class HorseBot {
                         }
                     }
                     if (privmsg.user.equals("enderjp")) {
-                        if (privmsg.body.contains(LAST_ENDER + " " + LAST_ENDER)) {
-                            messenger.privmsg(privmsg.channel, "HORSEBOT SAYS NO!");
+                        if (privmsg.body.equals(LAST_ENDER + LAST_ENDER) || privmsg.body.equals(LAST_ENDER + " " + LAST_ENDER)) {
+                            messenger.privmsg(privmsg.channel, "HORSEBOT SAYS NEIGH!");
+                        } else if (privmsg.body.startsWith(LAST_ENDER) && privmsg.body.endsWith(LAST_ENDER) && privmsg.body.length() > LAST_ENDER.length()) {
+                            messenger.privmsg(privmsg.channel, "Get that weak shit out of here, Ender.");
                         }
                         LAST_ENDER = privmsg.body;
                     }
