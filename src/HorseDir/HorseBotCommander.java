@@ -4,8 +4,7 @@ import WorldRecords.Category;
 import WorldRecords.RecordLookup;
 import WorldRecords.Restriction;
 
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by Aaron Fisher on 4/25/2017.
@@ -18,6 +17,7 @@ public class HorseBotCommander {
     private HorseBotDatabase database;
     private HorseBotAdventurer adventurer;
     private static String SPECIAL_USER = "enderjp";
+    private Map<String, Set<String>> votekick = new HashMap<>();
 
     public HorseBotCommander(HorseBotMessenger messenger, HorseBotDatabase database, HorseBotAdventurer adventurer) {
         this.messenger = messenger;
@@ -41,6 +41,19 @@ public class HorseBotCommander {
                     e.printStackTrace();
                 }
             break;
+            case "!anymurder":
+                try {
+                    Channel targetChannel = Channel.get(database.latestKey(HorseBotDatabase.Tracker.MURDERS));
+                    messenger.privmsg(channel, String.format(
+                            "The last runner to murder a horse was %s, %s ago. \uD83D\uDC0E " +
+                                    "HorseBot does not condone this type of behavior. \uD83D\uDC0E",
+                            targetChannel.nick,
+                            timeDifference(database.read(HorseBotDatabase.Tracker.MURDERS, targetChannel))
+                    ));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             case "!translate":
                 messenger.privmsg(channel, "Your Boko Shield is badly damaged. BibleThump (probably)");
                 //!translate "Dein Bokschild zerbricht gleich."
@@ -106,6 +119,23 @@ public class HorseBotCommander {
                         channel.nick
                 ));
                 break;
+            case "!votekick":
+                if (scanner.hasNext()) {
+                    String target = scanner.next();
+                    if (target.toLowerCase().equals("glitch29") || target.toLowerCase().startsWith("horsebot")) {
+                        target = user;
+                    }
+                    String t = target.toLowerCase();
+                    if (!votekick.containsKey(t)) {
+                        votekick.put(t, new HashSet<>());
+                    }
+                    if (votekick.get(t).add(user)) {
+                        messenger.privmsg(channel, String.format("%s now has %d votes to be removed from this channel.",
+                                target,
+                                votekick.get(t).size()));
+                    }
+                }
+                break;
             case "!seal":
                 messenger.privmsg(channel, String.format(
                         "It has been %s since %s gratuitously abused a Sand Seal. ᶘ ᵒᴥᵒᶅ",
@@ -120,6 +150,12 @@ public class HorseBotCommander {
                 if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
                     messenger.privmsg(channel, "The stream! panicBasket The stream! panicBasket The stream is on fire!");
                     messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
+                }
+                break;
+            case "!fire":
+                if (user.contains("glitch29") || user.contains(channel.broadcaster)) {
+                    messenger.privmsg(channel, "The Link! panicBasket The Link! panicBasket The Link is on fire!");
+                    messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25WE\uD83D\uDD25DON'T\uD83D\uDD25NEED\uD83D\uDD25ELIXIRS\uD83D\uDD25\uD83D\uDD25LET\uD83D\uDD25THE\uD83D\uDD25MOTHERFUCKER\uD83D\uDD25BURN\uD83D\uDD25\uD83D\uDD25");
                 }
                 break;
             case "!points":
