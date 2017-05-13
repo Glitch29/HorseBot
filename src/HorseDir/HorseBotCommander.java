@@ -29,6 +29,18 @@ public class HorseBotCommander {
         Scanner scanner = new Scanner(body);
         database.log(channel + " " + new Date().getTime() + " " + user + " " + body);
         switch (scanner.next().toLowerCase()) {
+            case "!⛄":
+                database.track(HorseBotDatabase.Tracker.ICERIVER, channel);
+            case "!river":
+                messenger.privmsg(channel, String.format(
+                        "It has been %s since %s fell into a river and drowned. ⛄",
+                        timeDifference(database.read(HorseBotDatabase.Tracker.ICERIVER, channel)),
+                        channel.nick
+                ));
+                break;
+            case "!bokostrats":
+                messenger.privmsg(channel, "\uD83D\uDD25\uD83D\uDD25 https://clips.twitch.tv/JollySourMomKreygasm \uD83D\uDD25\uD83D\uDD25");
+                break;
             case "!anyhorse":
                 try {
                     Channel targetChannel = Channel.get(database.latestKey(HorseBotDatabase.Tracker.DEATHS));

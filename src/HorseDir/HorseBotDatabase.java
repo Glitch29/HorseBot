@@ -91,6 +91,7 @@ public class HorseBotDatabase {
         DEATHS ("DeathLog.txt"),
         MURDERS ("MurderLog.txt"),
         SEALS ("SealLog.txt"),
+        ICERIVER ("IceRiver.txt"),
         LEVEL_UPS ("AdventureLog.txt");
 
         String fileName;

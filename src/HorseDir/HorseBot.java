@@ -58,7 +58,9 @@ public class HorseBot {
                     if (privmsg.user.equals("disbotdoh") && privmsg.body.startsWith("If ")) {
                         messenger.privmsg(privmsg.channel, "Or not. Your choice. \uD83D\uDC0E");
                     }
-                    if (privmsg.user.equals("spadespwnzbot") && privmsg.body.contains("if your enjoying")) {
+                    if (privmsg.user.equals("spadespwnzbot") && (
+                            privmsg.body.contains("if your enjoying")) ||
+                            privmsg.body.contains(" your dead")) {
                         messenger.privmsg(privmsg.channel, "http://writingexplained.org/your-vs-youre-difference \uD83D\uDC0E");
                     }
                     if (privmsg.user.equals("spadespwnzbot") && privmsg.body.substring(0, 6).equals("@horse")) {
