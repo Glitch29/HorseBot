@@ -92,7 +92,7 @@ public class HorseBotDatabase {
         MURDERS ("MurderLog.txt"),
         SEALS ("SealLog.txt"),
         ICERIVER ("IceRiver.txt"),
-        LEVEL_UPS ("AdventureLog.txt");
+        COUNTER ("Counter.txt");
 
         String fileName;
         Tracker(String fileName) {

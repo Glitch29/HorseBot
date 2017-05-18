@@ -20,7 +20,7 @@ public class HorseFact {
                     " across bridges.",
             "https://twitter.com/Dystify/status/854732136976351239",
             "What is horse? Baby, don't hurt me.",
-            "The original Konami code was 🐃🐃🐇🐇🐎🐍🐎🐍🐪🐴, but had to be modified for North American consoles" +
+            "The original Konami code was ⬆⬆⬇⬇⬅➡⬅➡\uD83D\uDC0E\uD83C\uDD70, but had to be modified for North American consoles" +
                     " which did not support the horse button.",
             "Domesticated in central Asia around five thousand years ago, the horse was instrumental to the" +
                     " development of Eurasian civilization. Unlike most other large mammals, it was not farmed for " +

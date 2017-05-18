@@ -7,8 +7,9 @@ import Adventures.Locations.TheTavern;
 import Adventures.Players.Hero;
 import Adventures.Players.Player;
 import HorseDir.Channel;
-import HorseDir.HorseBotMessenger;
-import MessageLines.Privmsg;
+import HorseDir.Messenger;
+import HorseDir.TwitchMessenger;
+import MessageLines.Message;
 
 import java.util.*;
 
@@ -20,10 +21,10 @@ public class Adventure {
     private Map<Player, Hero> playerMap;
     private List<Player> timeOutList;
     private AbstractLocation location;
-    private HorseBotMessenger messenger;
+    private Messenger messenger;
     private boolean ended = false;
 
-    public Adventure (Channel channel, HorseBotMessenger messenger) {
+    public Adventure (Channel channel, Messenger messenger) {
         this.channel = channel;
         this.messenger = messenger;
         playerMap = new HashMap<>();
@@ -31,11 +32,11 @@ public class Adventure {
         location = new TheTavern(this);
     }
 
-    public void command(Privmsg message) {
+    public void command(Message message) {
         if (ended) {
             return;
         }
-        Player player = new Player(message.channel, message.user);
+        Player player = new Player(message.channel, message.user.username);
         if (timeOutList.contains(player)) {
             return;
         }
@@ -66,11 +67,11 @@ public class Adventure {
     }
 
     public void publicMessage(String message) {
-        messenger.privmsg(channel, message);
+        messenger.message(channel, message);
     }
 
     public void whisper(Hero character, String message) {
-        messenger.privmsg(channel, "/w " + character.player.username + " " + message);
+        messenger.message(channel, "/w " + character.player.username + " " + message);
     }
 
     public void kill(Death death, Hero... heroes) {

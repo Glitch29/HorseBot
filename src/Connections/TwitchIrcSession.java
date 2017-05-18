@@ -30,7 +30,6 @@ public class TwitchIrcSession implements IrcSession {
 
     private TwitchIrcSession(Account credential) throws IOException {
         this.credential = credential;
-
         setReaderWriter();
         sendLogin();
         verifyLogin();
@@ -53,7 +52,7 @@ public class TwitchIrcSession implements IrcSession {
     }
 
     private void verifyLogin() throws IOException {
-        String line = null;
+        String line;
         while ((line = reader.readLine( )) != null) {
             System.out.println(">>> " + line);
             if (line.contains("004")) {

@@ -49,7 +49,7 @@ public class RecordLookup {
                 JSONObject run = runs.getJSONObject(i).getJSONObject("run");
                 boolean restricted = false;
                 for (Restriction restriction : restrictions) {
-                    if (getString(run, restriction.key).equals(restriction.value) != restriction.match) {
+                    if (!restricted && getString(run, restriction.key).equals(restriction.value) != restriction.match) {
                         restricted = true;
                     }
                 }
