@@ -1,6 +1,7 @@
 package HorseDir;
 
 import Adventures.Adventure;
+import HorseDir.Channels.Channel;
 import MessageLines.Message;
 
 import java.util.HashMap;

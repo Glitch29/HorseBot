@@ -1,6 +1,6 @@
 package MessageLines;
 
-import HorseDir.Channel;
+import HorseDir.Channels.Channel;
 
 /**
  * Created by Aaron Fisher on 4/25/2017.

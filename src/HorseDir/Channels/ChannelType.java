@@ -1,4 +1,4 @@
-package HorseDir;
+package HorseDir.Channels;
 
 /**
  * Created by Aaron Fisher on 5/17/2017.

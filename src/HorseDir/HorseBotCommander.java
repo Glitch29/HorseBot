@@ -1,5 +1,6 @@
 package HorseDir;
 
+import HorseDir.Channels.Channel;
 import MessageLines.Message;
 import WorldRecords.Category;
 import WorldRecords.RecordLookup;
@@ -23,12 +24,13 @@ public class HorseBotCommander {
         this.adventurer = adventurer;
         superusers = new HashSet<>();
         superusers.add("glitch29");
+        superusers.add("jerrytheret");
     }
 
     public void command(Message message) {
         Scanner scanner = new Scanner(message.body);
         database.log(String.format("%s %d %s %s",
-                message.channel.name,
+                message.channel.name(),
                 new Date().getTime(),
                 message.user,
                 message.body));
@@ -36,30 +38,43 @@ public class HorseBotCommander {
         User user = message.user;
 
         switch (scanner.next().toLowerCase()) {
+            case "!❄":
+                Event.CRYOSIS.write(database, channel);
+            case "!cryosis":
+                Event.CRYOSIS.read(database, channel);
+                break;
             case "!nopyramid":
-                database.track(HorseBotDatabase.Tracker.COUNTER, channel);
+                Event.PYRAMID.write(database, channel);
             case "!pyramid":
-                channel.message(String.format(
-                        "It has been %s since %s forgot to put a counter on his Pyramid of the Pantheon. \uD83D\uDD3A",
-                        timeDifference(database.read(HorseBotDatabase.Tracker.COUNTER, channel)),
-                        channel.nick
-                ));
+                Event.PYRAMID.read(database, channel);
+                break;
+            case "!\uD83C\uDF35":
+                Event.CACTUS.write(database, channel);
+            case "!cactus":
+                Event.CACTUS.read(database, channel);
                 break;
             case "!⛄":
-                database.track(HorseBotDatabase.Tracker.ICERIVER, channel);
+                Event.RIVER.write(database, channel);
             case "!river":
-                channel.message(String.format(
-                        "It has been %s since %s fell into a river and drowned. ⛄",
-                        timeDifference(database.read(HorseBotDatabase.Tracker.ICERIVER, channel)),
-                        channel.nick
-                ));
+                Event.RIVER.read(database, channel);
+                break;
+            case "!neigh":
+                Event.HORSE.write(database, channel);
+            case "!horse":
+                Event.HORSE.read(database, channel);
+                break;
+            case "!d:":
+                Event.MURDER.write(database, channel);
+            case "!murder":
+                Event.MURDER.read(database, channel);
+                break;
+            case "!notlikeseal":
+                Event.SEAL.write(database, channel);
+            case "!seal":
+                Event.SEAL.read(database, channel);
                 break;
             case "!bokostrats":
                 channel.message("\uD83D\uDD25\uD83D\uDD25 https://clips.twitch.tv/JollySourMomKreygasm \uD83D\uDD25\uD83D\uDD25");
-                break;
-            case "!setup":
-                channel.message(String.format("%s uses the following equipment in their stream:",
-                        channel.nick));
                 break;
             case "!strats":
                 channel.message("Visual strat: http://i.imgur.com/WTSMSxG.jpg \uD83D\uDD25\uD83D\uDD25");
@@ -67,10 +82,12 @@ public class HorseBotCommander {
             case "!anyhorse":
                 try {
                     Channel targetChannel = Channel.get(database.latestKey(HorseBotDatabase.Tracker.DEATHS));
+                    HorseBotDatabase.LongWithNotes data = database.read(HorseBotDatabase.Tracker.DEATHS, targetChannel);
                     channel.message(String.format(
-                            "The last runner to be killed by a horse was %s, %s ago. \uD83D\uDC0E",
-                            targetChannel.nick,
-                            timeDifference(database.read(HorseBotDatabase.Tracker.DEATHS, targetChannel))
+                           "The last runner to be killed by a horse was %s, %s ago. \uD83D\uDC0E %s",
+                            targetChannel.settings().name(),
+                            timeDifference(data.date),
+                            data.notes
                     ));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,29 +96,15 @@ public class HorseBotCommander {
             case "!anymurder":
                 try {
                     Channel targetChannel = Channel.get(database.latestKey(HorseBotDatabase.Tracker.MURDERS));
+                    HorseBotDatabase.LongWithNotes data = database.read(HorseBotDatabase.Tracker.MURDERS, targetChannel);
                     channel.message(String.format(
                             "The last runner to murder a horse was %s, %s ago. \uD83D\uDC0E " +
                                     "HorseBot does not condone this type of behavior. \uD83D\uDC0E",
-                            targetChannel.nick,
-                            timeDifference(database.read(HorseBotDatabase.Tracker.MURDERS, targetChannel))
+                            targetChannel.settings().name(),
+                            timeDifference(data.date)
                     ));
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-                break;
-            case "!horse":
-                Channel targetChannel = channel;
-                try {
-                    targetChannel = Channel.get(scanner.next());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (database.read(HorseBotDatabase.Tracker.DEATHS, targetChannel) > 0L) {
-                    channel.message(String.format(
-                            "It has been %s since %s was last killed by a horse. \uD83D\uDC0E",
-                            timeDifference(database.read(HorseBotDatabase.Tracker.DEATHS, targetChannel)),
-                            targetChannel.nick
-                    ));
                 }
                 break;
             case "!!":
@@ -113,11 +116,17 @@ public class HorseBotCommander {
                             channel.message(next + next);
                             channel.message(next + next + next);
                             channel.message(next + next);
-                            channel.message(next);
+                            if (superusers.contains(user.username)) {
+                                channel.message(next);
+                            } else {
+                                channel.message("Purchase HorseBot Premium to complete this pyramid.");
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    user.personalMessage("Interrupt one of Enderjp's pyramids, and post a screenshot of it to enable this feature.");
                 }
                 break;
             case "!announce":
@@ -125,19 +134,20 @@ public class HorseBotCommander {
                     try {
                         if (scanner.hasNext()) {
                             String next = scanner.next().toLowerCase();
-                            System.out.println(next);
                             Channel believe = Channel.get("#" + next);
-                            believe.message(String.format(
-                                    scanner.nextLine(),
-                                    believe.broadcaster
-                            ));
+                            believe.message(
+                                    (user.username.equals("glitch29") ? "" : "\uD83D\uDC0E ") +
+                                    String.format(
+                                        scanner.nextLine(),
+                                        believe.broadcaster
+                                    ));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 break;
-            case "!believe2":
+            case "!believe":
                 try {
                     if (scanner.hasNext()) {
                         String next = scanner.next().toLowerCase();
@@ -145,7 +155,7 @@ public class HorseBotCommander {
                         Channel believe = Channel.get("#" + next);
                         believe.message(String.format(
                                 "HorseBot believes in you, %s. You're not going to screw it up! \uD83D\uDC0E",
-                                believe.nick
+                                believe
                         ));
                     }
                 } catch (Exception e) {
@@ -160,27 +170,15 @@ public class HorseBotCommander {
                         Channel believe = Channel.get("#" + next);
                         believe.message(String.format(
                                 "HorseBot is trying to believe in you, %s! Sometimes it's a hard thing to do. \uD83D\uDC0E",
-                                believe.nick
+                                believe
                         ));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case "!fuckamiibos":
-                channel.message("PJSalt");
-                break;
             case "!magnesisstrats":
                 channel.message("https://clips.twitch.tv/PlumpImpossibleChoughGOWSkull");
-                break;
-            case "!murder":
-                if (database.read(HorseBotDatabase.Tracker.MURDERS, channel) > 0L) {
-                    channel.message(String.format(
-                            "It has been %s since %s brutally murdered a horse. \uD83D\uDC0E",
-                            timeDifference(database.read(HorseBotDatabase.Tracker.MURDERS, channel)),
-                            channel.nick
-                    ));
-                }
                 break;
             case "!votekick":
                 if (scanner.hasNext()) {
@@ -199,31 +197,22 @@ public class HorseBotCommander {
                     }
                 }
                 break;
+            case "!channel":
             case "!energy":
-                    if (!votekick.containsKey(message.channel.nick)) {
-                        votekick.put(message.channel.nick, new HashSet<>());
+                    if (!votekick.containsKey(message.channel.name())) {
+                        votekick.put(message.channel.name(), new HashSet<>());
                     }
-                    if (votekick.get(message.channel.nick).add(user.username)) {
+                    if (votekick.get(message.channel.name()).add(user.username)) {
                         channel.message(String.format("%s is channeling his energy. %d people believe in you, %s!",
                                 message.user.username,
-                                votekick.get(message.channel.nick).size(),
-                                message.channel.nick));
+                                votekick.get(message.channel.name()).size(),
+                                message.channel.name()));
                     }
-                break;
-            case "!seal":
-                channel.message(String.format(
-                        "It has been %s since %s gratuitously abused a Sand Seal. ᶘ ᵒᴥᵒᶅ",
-                        timeDifference(database.read(HorseBotDatabase.Tracker.SEALS, channel)),
-                        channel.nick
-                ));
-                break;
-            case "!cryosisstrats":
-                channel.message("https://www.youtube.com/watch?v=lzykoWSZ8TQ&list=PL7bccJYa7qUVbgbaC0inZOl-cYarjSrZm");
                 break;
             case "!panic":
                 if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
                     channel.message("The stream! panicBasket The stream! panicBasket The stream is on fire!");
-                    channel.message("\uD83D\uDD25\uD83D\uDD25WE DON'T NEED NO WATER. LET THE MOTHERFUCKER BURN\uD83D\uDD25\uD83D\uDD25");
+                    channel.message("\uD83D\uDD25\uD83D\uDD25WE\uD83D\uDD25DON'T\uD83D\uDD25NEED\uD83D\uDD25NO\uD83D\uDD25WATER\uD83D\uDD25\uD83D\uDD25LET\uD83D\uDD25THE\uD83D\uDD25MOTHERFUCKER\uD83D\uDD25BURN\uD83D\uDD25\uD83D\uDD25");
                 }
                 break;
             case "!fire":
@@ -273,9 +262,6 @@ public class HorseBotCommander {
             case "!ms-a":
                 channel.message(RecordLookup.leaderboard(Category.MS, Restriction.Amiiboless));
                 break;
-            case "!ad-a-na":
-                channel.message(RecordLookup.leaderboard(Category.AD, Restriction.Amiiboless, Restriction.USA));
-                break;
             case "!pb":
                 channel.message(RecordLookup.getPBbyName(scanner.hasNext() ? scanner.next() : channel.broadcaster));
                 break;
@@ -309,37 +295,17 @@ public class HorseBotCommander {
                     channel.message(StreamerFact.fact(channel) + " 4Head");
                 }
                 break;
-            case "!neigh":
-                if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
-                   channel.message(String.format(
-                            "It has been %s since %s was last killed by a horse. BibleThump",
-                            timeDifference(database.track(HorseBotDatabase.Tracker.DEATHS, channel)),
-                            channel.nick
-                    ));
-                }
-                break;
-            case "!d:":
-                if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
-                    channel.message(String.format(
-                            "It has been %s since %s brutally murdered a horse. D:",
-                            timeDifference(database.track(HorseBotDatabase.Tracker.MURDERS, channel)),
-                            channel.nick
-                    ));
-                }
-                break;
             case "!\uD83D\uDC0E":
-                if (superusers.contains(user.username)) {
+                if (superusers.contains(user.username) || (user.username.equals(channel.broadcaster))) {
                     channel.message("\uD83D\uDC0E");
                     channel.message("\uD83D\uDC0E\uD83D\uDC0E");
                     channel.message("\uD83D\uDC0E\uD83D\uDC0E\uD83D\uDC0E");
                     channel.message("\uD83D\uDC0E\uD83D\uDC0E");
-                    channel.message("\uD83D\uDC0E");
-                } else if (user.username.equals(channel.broadcaster)) {
-                    channel.message("\uD83D\uDC0E");
-                    channel.message("\uD83D\uDC0E\uD83D\uDC0E");
-                    channel.message("\uD83D\uDC0E\uD83D\uDC0E\uD83D\uDC0E");
-                    channel.message("\uD83D\uDC0E\uD83D\uDC0E");
+                }
+                if (user.username.equals(channel.broadcaster)) {
                     channel.message("Purchase HorseBotXD Premium to complete this pyramid.");
+                } else if (superusers.contains(user.username)) {
+                    channel.message("\uD83D\uDC0E");
                 } else {
                     user.personalMessage(String.format("/w %s Enter a secret code to unlock this special power.",
                             user));
@@ -363,5 +329,39 @@ public class HorseBotCommander {
                 + (hours > 0 ? (hours % 24) + " hours, " : "")
                 + (minutes > 0 ? (minutes % 60) + " minutes, and " : "")
                 + (seconds % 60) + " seconds");
+    }
+
+    private enum Event {
+        HORSE (HorseBotDatabase.Tracker.DEATHS, "It has been %s since %s was last killed by a horse. BibleThump %s"),
+        MURDER (HorseBotDatabase.Tracker.MURDERS, "It has been %s since %s brutally murdered a horse. D: %s"),
+        RIVER (HorseBotDatabase.Tracker.ICERIVER, "It has been %s since %s fell into a river and drowned. ⛄ %s"),
+        SEAL (HorseBotDatabase.Tracker.SEALS, "It has been %s since %s gratuitously abused a Sand Seal. ᶘ ᵒᴥᵒᶅ"),
+        CRYOSIS (HorseBotDatabase.Tracker.CRYOSIS, "It has been %s since %s last nailed the skip in Cryosis during a run. ❄"),
+        PYRAMID (HorseBotDatabase.Tracker.COUNTER, "It has been %s since %s forgot to put a counter on his Pyramid of the Pantheon. \uD83D\uDD3A %s"),
+        CACTUS (HorseBotDatabase.Tracker.CACTUS, "It has been %s since %s bombed a cactus at point blank range. \uD83C\uDF35 %s");
+
+        String message;
+        HorseBotDatabase.Tracker tracker;
+
+        Event(HorseBotDatabase.Tracker tracker, String message) {
+            this.tracker = tracker;
+            this.message = message;
+        }
+
+        private void read(HorseBotDatabase database, Channel channel) {
+            HorseBotDatabase.LongWithNotes data = database.read(tracker, channel);
+            if (data == null) {
+                return;
+            }
+            channel.message(String.format(
+                    message,
+                    timeDifference(data.date),
+                    channel.name(),
+                    data.notes));
+        }
+
+        private void write(HorseBotDatabase database, Channel channel) {
+            database.track(tracker, channel);
+        }
     }
 }

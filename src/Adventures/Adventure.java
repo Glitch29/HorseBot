@@ -6,9 +6,8 @@ import Adventures.Locations.AbstractLocation;
 import Adventures.Locations.TheTavern;
 import Adventures.Players.Hero;
 import Adventures.Players.Player;
-import HorseDir.Channel;
+import HorseDir.Channels.Channel;
 import HorseDir.Messenger;
-import HorseDir.TwitchMessenger;
 import MessageLines.Message;
 
 import java.util.*;

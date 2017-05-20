@@ -1,5 +1,6 @@
 package HorseDir;
 
+import HorseDir.Channels.Channel;
 import MessageLines.Message;
 import MessageLines.ParsedMessage;
 

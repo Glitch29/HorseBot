@@ -4,6 +4,7 @@ import Connections.IrcSession;
 import Connections.TwitchIrcSession;
 import Accounts.Account;
 import Accounts.HorseBotXD;
+import HorseDir.Channels.Channel;
 import MessageLines.Message;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.*;
 public class HorseBot {
     private static Integer SPOODLES_POINTS;
     private static int SPOODLES_BET = 0;
+    private static final int SPOODLES_GOAL = 1000000;
     private static final long SPOODLES_DELAY = 1000L * 65L;
     private static long NEXT_SPOODLES = setNextSpoodles();
     private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
@@ -33,7 +35,8 @@ public class HorseBot {
         HorseBotCommander commander = new HorseBotCommander(database, adventurer);
         try (Scanner scanner = new Scanner(new File(DIRECTORY + CHANNEL_LIST))) {
             while (scanner.hasNext()) {
-                Channel.make(scanner.next(), scanner.next(), messenger);
+                Channel.make(scanner.next(), messenger);
+                scanner.nextLine();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -85,7 +88,7 @@ public class HorseBot {
                 if (SPOODLES_POINTS == null) {
                     messenger.message(Channel.get("#spades_live"), "!points");
                 } else {
-                    SPOODLES_BET = SPOODLES_POINTS / 40;
+                    SPOODLES_BET = Math.min((13 + SPOODLES_GOAL - SPOODLES_POINTS) / 14, SPOODLES_POINTS / 40);
                     SPOODLES_POINTS -= SPOODLES_BET;
                     messenger.message(Channel.get("#spades_live"), "!cgss " + (SPOODLES_BET));
                 }

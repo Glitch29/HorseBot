@@ -1,5 +1,7 @@
 package HorseDir;
 
+import HorseDir.Channels.Channel;
+
 /**
  * Created by Aaron Fisher on 5/17/2017.
  */

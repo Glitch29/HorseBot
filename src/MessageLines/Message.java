@@ -1,6 +1,6 @@
 package MessageLines;
 
-import HorseDir.Channel;
+import HorseDir.Channels.Channel;
 import HorseDir.User;
 
 /**
