@@ -1,6 +1,6 @@
 package Adventures.Players;
 
-import HorseDir.Channel;
+import HorseDir.Channels.Channel;
 
 /**
  * Created by Aaron Fisher on 4/26/2017.

@@ -1,7 +1,8 @@
 package HorseDir;
 
 import Adventures.Adventure;
-import MessageLines.Privmsg;
+import HorseDir.Channels.Channel;
+import MessageLines.TwitchMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +12,9 @@ import java.util.Map;
  */
 public class HorseBotAdventurer {
     private Map<Channel, Adventure> adventureMap;
-    private HorseBotMessenger messenger;
+    private Messenger messenger;
 
-    public HorseBotAdventurer(HorseBotMessenger messenger) {
+    public HorseBotAdventurer(Messenger messenger) {
         this.messenger = messenger;
         adventureMap = new HashMap<>();
     }
@@ -30,7 +31,7 @@ public class HorseBotAdventurer {
         }
     }
 
-    public void command(Privmsg message) {
+    public void command(TwitchMessage message) {
         if (adventureMap.containsKey(message.channel)) {
             adventureMap.get(message.channel).command(message);
         }

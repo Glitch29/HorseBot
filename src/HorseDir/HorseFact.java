@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class HorseFact {
     private static final Random random = new Random(new Date().getTime());
-    public static final ArrayList<String> HORSE_FACTS = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> HORSE_FACTS = new ArrayList<>(Arrays.asList(
             "Horses look like this --> 🐎",
             "Horses were first introduced to North America in the late 1600s. They proceeded to be tamed by various " +
                     "indigenous tribes over the next hundred years, but their biggest advancement came when in 1992 " +
@@ -20,8 +20,8 @@ public class HorseFact {
                     " across bridges.",
             "https://twitter.com/Dystify/status/854732136976351239",
             "What is horse? Baby, don't hurt me.",
-            "The original Konami code was 🐃🐃🐇🐇🐎🐍🐎🐍🐪🐴, but had to be modified for North American consoles" +
-                    " which did not support the horse button.",
+            "The original Konami code was ⬆⬆⬇⬇⬅➡⬅➡\uD83D\uDC0E\uD83C\uDD70. But it had to be modified for North " +
+                    "American consoles which did not support the horse button.",
             "Domesticated in central Asia around five thousand years ago, the horse was instrumental to the" +
                     " development of Eurasian civilization. Unlike most other large mammals, it was not farmed for " +
                     "its meat, milk or hides. Instead, the horse was harnessed solely for its incredible strength – " +
@@ -43,12 +43,26 @@ public class HorseFact {
                     "attempt to reproduce.",
             "4 out of 5 horses recommend Colgate.",
             "In the 16th century, “horse” was a common adjective describing anything strong, big, or coarse. Along " +
-                    "with horseplay, that’s how horseradish got its name.",
+                    "with horseplay, that’s how horseradish got its nick.",
             "The Canada horse, commonly referred to as møøse, is the single most frequent cause of automobile " +
                     "accidents in lumberjack country.",
             "A team of researchers is currently hard at work creating top-tier \"horse facts\". To contribute to " +
                     "the research, please type !addfact <your fact>. \uD83D\uDC0E",
-            "The secret code is ⬆⬆⬇⬇⬅➡⬅➡\uD83C\uDD71\uD83C\uDD70."
+            "The secret code is ⬆⬆⬇⬇⬅➡⬅➡\uD83C\uDD71\uD83C\uDD70.",
+            "Twitch reserves partnership for streamers who treat their horses with respect.",
+            "Horses can sleep both lying down and standing up.",
+            "A horse is a horse, of course. Of course! And no one can talk to a horse, of course. That is, of " +
+                    "course, unless the horse is the famous Mister Ed.",
+            "Did you hear the one about a pony with a throat infection? It was a little hoarse.",
+            "Send your ideas and suggestions to HorseBotXD@gmail.com.",
+            "With horses like that, who needs enemies?",
+            "I memed a meme in time gone by \uD83D\uDC34 When lulz were high and life worth living \uD83D\uDC0E " +
+                    "I dreamed that spam would never die \uD83D\uDC34 I dreamed that Mods would be forgiving \uD83D\uDC0E " +
+                    "Then I was a pleb and unafraid \uD83D\uDC34 And memes were made and copy/pasted \uD83D\uDC0E " +
+                    "There was no sub fee to be paid \uD83D\uDC34 No slow mode on, no dankness wasted",
+            "Every good Breath of the Wild run will need a 4-speed horse, either from a Super Smash Bros. Series " +
+                    "Link amiibo or a lucky spawn in Hyrule Field.",
+            "Horses are the stars of this stream. Everyone else is just bit players."
             ));
 
     public static String fact() {
@@ -56,6 +70,6 @@ public class HorseFact {
     }
 
     public static String fact(int i) {
-        return HORSE_FACTS.get(i % HORSE_FACTS.size());
+        return HORSE_FACTS.get(Math.abs(i) % HORSE_FACTS.size());
     }
 }

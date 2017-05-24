@@ -49,7 +49,7 @@ public class RecordLookup {
                 JSONObject run = runs.getJSONObject(i).getJSONObject("run");
                 boolean restricted = false;
                 for (Restriction restriction : restrictions) {
-                    if (getString(run, restriction.key).equals(restriction.value) != restriction.match) {
+                    if (!restricted && getString(run, restriction.key).equals(restriction.value) != restriction.match) {
                         restricted = true;
                     }
                 }
@@ -93,6 +93,7 @@ public class RecordLookup {
             JSONArray runs = getArray(
                 new JSONObject(new Scanner(response).useDelimiter("\\A").next()),
                 "data");
+            System.out.println(runs.toString(4));
             for (int i = 0; i < runs.length(); i++) {
                 try {
                     JSONObject run = runs.getJSONObject(i);
