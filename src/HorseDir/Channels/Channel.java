@@ -28,7 +28,9 @@ public class Channel {
     public static void make(String name, Messenger messenger) {
         assert !CHANNELS.containsKey(name);
         Channel channel = new Channel(messenger, name);
-        messenger.join(channel);
+        if (channel.settings().isJoined()) {
+            messenger.join(channel);
+        }
         CHANNELS.put(name, channel);
     }
 
@@ -55,7 +57,7 @@ public class Channel {
         return new ChannelData(broadcaster);
     }
 
-    public String name() {
+    public String nick() {
         return settings().name();
     }
 
@@ -65,6 +67,6 @@ public class Channel {
 
     @Override
     public String toString() {
-        return name();
+        return nick();
     }
 }

@@ -1,6 +1,7 @@
 package HorseDir;
 
 import HorseDir.Channels.Channel;
+import HorseLogs.Trackers.Tracker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import java.util.*;
  */
 public class HorseBotDatabase {
     private static final String SESSION_FOLDER = "SessionLogs\\";
+    private static final String TRACKER_FOLDER = "Trackers\\";
     private static final Map<Tracker,Map<String, LongWithNotes>> TRACKER_MAP = new HashMap<>();
     private final String directory;
     private FileWriter sessionLog;
@@ -27,10 +29,10 @@ public class HorseBotDatabase {
     }
 
     public LongWithNotes read(Tracker tracker, Channel channel) {
-        if (!readTracker(tracker).containsKey(channel.name)) {
+        if (!readTracker(tracker).containsKey(channel.channelCode())) {
             return null;
         }
-        return readTracker(tracker).get(channel.name);
+        return readTracker(tracker).get(channel.channelCode());
     }
 
     public long track(Tracker tracker, Channel channel) {
@@ -38,9 +40,9 @@ public class HorseBotDatabase {
     }
 
     public long track(Tracker tracker, Channel channel, Long time) {
-        readTracker(tracker).put(channel.name, new LongWithNotes(time, ""));
-        try (FileWriter writer = new FileWriter(new File(directory + tracker.fileName), true)) {
-            writer.write(channel.name + " " + time + "\n");
+        readTracker(tracker).put(channel.channelCode(), new LongWithNotes(time, ""));
+        try (FileWriter writer = new FileWriter(new File(directory + TRACKER_FOLDER + tracker.fileName), true)) {
+            writer.write(channel.channelCode() + " " + time + "\n");
             writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +79,7 @@ public class HorseBotDatabase {
     }
 
     private Map<String, LongWithNotes> loadTracker(Tracker tracker) {
-        File file = new File(directory + tracker.fileName);
+        File file = new File(directory + TRACKER_FOLDER + tracker.fileName);
         Map<String, LongWithNotes> map = new HashMap<>();
         try (Scanner scanner = new Scanner(file)){
             while (scanner.hasNext()) {
@@ -87,21 +89,6 @@ public class HorseBotDatabase {
             e.printStackTrace();
         }
         return map;
-    }
-
-    public enum Tracker {
-        DEATHS ("DeathLog.txt"),
-        MURDERS ("MurderLog.txt"),
-        SEALS ("SealLog.txt"),
-        ICERIVER ("IceRiver.txt"),
-        COUNTER ("Counter.txt"),
-        CACTUS ("Cactus.txt"),
-        CRYOSIS ("Cryosis.txt");
-
-        String fileName;
-        Tracker(String fileName) {
-            this.fileName = fileName;
-        }
     }
 
     public static class LongWithNotes {

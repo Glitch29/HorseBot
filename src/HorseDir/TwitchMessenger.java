@@ -1,7 +1,6 @@
 package HorseDir;
 
 import HorseDir.Channels.Channel;
-import MessageLines.Message;
 import MessageLines.ParsedMessage;
 
 import java.io.BufferedReader;
@@ -27,12 +26,10 @@ public class TwitchMessenger implements Messenger {
     private String nextLine() {
         if (timers.size() > 0 && timers.peek().timestamp <= new Date().getTime()) {
             DelayedLine delayedLine = timers.poll();
-            System.out.println(">T> " + delayedLine.line);
             return delayedLine.line;
         }
         try {
             String line = reader.readLine();
-            System.out.println(">>> " + line);
             return line;
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,20 +37,20 @@ public class TwitchMessenger implements Messenger {
         }
     }
 
-    public Message nextMessage() {
+    public MessageLines.TwitchMessage nextMessage() {
         String line = nextLine();
         if (line == null) {
-            return nextMessage();
+            return null;
         }
         if (line.startsWith("PING ")) {
             sendLine(new Pong(line.substring(5)));
-            return nextMessage();
+            return null;
         }
         ParsedMessage parsedMessage = new ParsedMessage(line);
         if (parsedMessage.type.equals("PRIVMSG")) {
-            return new Message(parsedMessage);
+            return new MessageLines.TwitchMessage(parsedMessage);
         }
-        return nextMessage();
+        return null;
     }
 
     public void join(Channel channel) {
@@ -98,7 +95,7 @@ public class TwitchMessenger implements Messenger {
 
         @Override
         public String toString() {
-            return HEADER + channel.name;
+            return HEADER + channel.channelCode();
         }
     }
 
@@ -116,7 +113,7 @@ public class TwitchMessenger implements Messenger {
         public String toString() {
             return String.format("%s%s :%s",
                     HEADER,
-                    channel.name,
+                    channel.channelCode(),
                     body);
         }
     }

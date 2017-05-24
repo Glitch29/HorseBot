@@ -5,7 +5,7 @@ import Connections.TwitchIrcSession;
 import Accounts.Account;
 import Accounts.HorseBotXD;
 import HorseDir.Channels.Channel;
-import MessageLines.Message;
+import MessageLines.TwitchMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,7 +23,6 @@ public class HorseBot {
     private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
     private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
     private static Account ACCOUNT = new HorseBotXD();
-    private static String LAST_ENDER = "d";
 
     public static void main(String[] args) throws Exception {
         SPOODLES_POINTS = null;
@@ -43,8 +42,17 @@ public class HorseBot {
         }
 
         // Keep reading lines from the server.
-        Message message = null;
-        while ((message = messenger.nextMessage()) != null) {
+        TwitchMessage message;
+        while (SPOODLES_POINTS == null || SPOODLES_POINTS < SPOODLES_GOAL) {
+            do {
+                message = messenger.nextMessage();
+            } while (message == null);
+            if (message.channel.settings().isLogged()) {
+                System.out.println(String.format(">>> %s %s %s",
+                        message.user.username,
+                        message.channel.channelCode(),
+                        message.body));
+            }
             if (message.body.charAt(0) == '!') {
                 commander.command(message);
             }
@@ -72,14 +80,6 @@ public class HorseBot {
             if (message.user.username.equals("spadespwnzbot") && message.body.startsWith("@horsebotxd You do a perfect CGSS")) {
                 SPOODLES_POINTS += SPOODLES_BET * 15;
             }
-            if (message.user.username.equals("enderjp")) {
-                if (message.body.equals(LAST_ENDER + LAST_ENDER) || message.body.equals(LAST_ENDER + " " + LAST_ENDER)) {
-                    messenger.message(message.channel, "HORSEBOT SAYS NEIGH!");
-                } else if (message.body.startsWith(LAST_ENDER) && message.body.endsWith(LAST_ENDER) && message.body.length() > LAST_ENDER.length()) {
-                    messenger.message(message.channel, "Get that weak shit out of here, Ender.");
-                }
-                LAST_ENDER = message.body;
-            }
             if (message.body.contains("\uD83D\uDC0E")) {
                 adventurer.command(message);
             }
@@ -90,7 +90,7 @@ public class HorseBot {
                 } else {
                     SPOODLES_BET = Math.min((13 + SPOODLES_GOAL - SPOODLES_POINTS) / 14, SPOODLES_POINTS / 40);
                     SPOODLES_POINTS -= SPOODLES_BET;
-                    messenger.message(Channel.get("#spades_live"), "!cgss " + (SPOODLES_BET));
+                    messenger.message(Channel.get("#spades_live"), "!cgss " + SPOODLES_BET);
                 }
             }
         }

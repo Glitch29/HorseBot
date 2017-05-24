@@ -56,7 +56,7 @@ public class TwitchIrcSession implements IrcSession {
         while ((line = reader.readLine( )) != null) {
             System.out.println(">>> " + line);
             if (line.contains("004")) {
-                // We are now logged in.
+                // We are now isLogged in.
                 break;
             }
             else if (line.contains("433")) {

@@ -93,6 +93,7 @@ public class RecordLookup {
             JSONArray runs = getArray(
                 new JSONObject(new Scanner(response).useDelimiter("\\A").next()),
                 "data");
+            System.out.println(runs.toString(4));
             for (int i = 0; i < runs.length(); i++) {
                 try {
                     JSONObject run = runs.getJSONObject(i);

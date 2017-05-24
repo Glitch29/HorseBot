@@ -8,7 +8,7 @@ import Adventures.Players.Hero;
 import Adventures.Players.Player;
 import HorseDir.Channels.Channel;
 import HorseDir.Messenger;
-import MessageLines.Message;
+import MessageLines.TwitchMessage;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public class Adventure {
         location = new TheTavern(this);
     }
 
-    public void command(Message message) {
+    public void command(TwitchMessage message) {
         if (ended) {
             return;
         }

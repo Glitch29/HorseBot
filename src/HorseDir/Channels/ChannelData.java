@@ -1,11 +1,10 @@
 package HorseDir.Channels;
 
-import HorseDir.Messenger;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created by Aaron Fisher on 5/12/2017.
@@ -18,6 +17,7 @@ public class ChannelData {
     private boolean chat;
     private boolean mod;
     private boolean logged;
+    private boolean joined;
     private ChannelType channelType = ChannelType.TWITCH;
 
     public ChannelData(String broadcaster) {
@@ -29,12 +29,14 @@ public class ChannelData {
     }
 
     private boolean loadFromFile(String broadcaster) {
-        try (FileReader fileReader = new FileReader(new File(String.format(CHANNEL_DATA_FORMAT, broadcaster)))) {
-            JSONObject settings = new JSONObject(fileReader);
+        try {
+            String file = new String(Files.readAllBytes(Paths.get(String.format(CHANNEL_DATA_FORMAT, broadcaster))));
+            JSONObject settings = new JSONObject(file);
             nick = getString(settings, SettingName.NICK);
             mod = getBool(settings, SettingName.MOD);
             chat = getBool(settings, SettingName.CHAT);
             logged = getBool(settings, SettingName.LOGGED);
+            joined = getBool(settings, SettingName.JOINED);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -62,6 +64,14 @@ public class ChannelData {
         return chat;
     }
 
+    public boolean isLogged() {
+        return logged;
+    }
+
+    public boolean isJoined() {
+        return joined;
+    }
+
     private static String getString(JSONObject jsonObject, SettingName key) {
         if (!jsonObject.has(key.toString())) {
             return null;
@@ -82,7 +92,8 @@ public class ChannelData {
         NICK ("nick"),
         MOD ("mod"),
         CHAT ("chat"),
-        LOGGED ("logged");
+        LOGGED ("logged"),
+        JOINED ("join");
 
         private String name;
 

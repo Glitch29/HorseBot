@@ -6,19 +6,19 @@ import HorseDir.User;
 /**
  * Created by Aaron Fisher on 4/25/2017.
  */
-public class Message {
+public class TwitchMessage {
     public User user;
     public Channel channel;
     public String body;
 
 
-    public Message(User user, Channel channel, String body) {
+    public TwitchMessage(User user, Channel channel, String body) {
         this.user = user;
         this.channel = channel;
         this.body = body;
     }
 
-    public Message(ParsedMessage message) {
+    public TwitchMessage(ParsedMessage message) {
         assert message.type.equals("PRIVMSG");
         assert message.data != null;
         assert message.data.size() > 0;
