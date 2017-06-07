@@ -49,3 +49,5 @@ Temporary Items
 *.txt
 out
 target
+/twitter4j.properties
+/lib/

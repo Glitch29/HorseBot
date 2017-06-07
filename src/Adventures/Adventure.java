@@ -66,11 +66,11 @@ public class Adventure {
     }
 
     public void publicMessage(String message) {
-        messenger.message(channel, message);
+        messenger.message(channel, message, false);
     }
 
     public void whisper(Hero character, String message) {
-        messenger.message(channel, "/w " + character.player.username + " " + message);
+        messenger.message(channel, "/w " + character.player.username + " " + message, false);
     }
 
     public void kill(Death death, Hero... heroes) {

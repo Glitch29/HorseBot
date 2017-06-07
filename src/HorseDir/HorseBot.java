@@ -17,8 +17,8 @@ import java.util.*;
 public class HorseBot {
     private static Integer SPOODLES_POINTS;
     private static int SPOODLES_BET = 0;
-    private static final int SPOODLES_GOAL = 1000000;
-    private static final long SPOODLES_DELAY = 1000L * 65L;
+    private static final int SPOODLES_GOAL = 1000000000;
+    private static final long SPOODLES_DELAY = 1000L * 650L;
     private static long NEXT_SPOODLES = setNextSpoodles();
     private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
     private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
@@ -57,12 +57,12 @@ public class HorseBot {
                 commander.command(message);
             }
             if (message.user.username.equals("disbotdoh") && message.body.startsWith("If ")) {
-                messenger.message(message.channel, "Or not. Your choice. \uD83D\uDC0E");
+                messenger.message(message.channel, "Or not. Your choice. \uD83D\uDC0E", false);
             }
             if (message.user.username.equals("spadespwnzbot") && (
                     message.body.contains("if your enjoying")) ||
                     message.body.contains(" your dead")) {
-                messenger.message(message.channel, "http://writingexplained.org/your-vs-youre-difference \uD83D\uDC0E");
+                messenger.message(message.channel, "http://writingexplained.org/your-vs-youre-difference \uD83D\uDC0E", false);
             }
             if (message.user.username.equals("spadespwnzbot") && message.body.startsWith("@horsebotxd ") && message.body.endsWith(" points.")) {
                 try (Scanner scanner = new Scanner(message.body)) {
@@ -71,9 +71,9 @@ public class HorseBot {
                     }
                     if (scanner.hasNextInt()) {
                         SPOODLES_POINTS = scanner.nextInt();
-                        SPOODLES_BET = SPOODLES_POINTS / 40;
+                        SPOODLES_BET = 2 * SPOODLES_POINTS / 77;
                         SPOODLES_POINTS -= SPOODLES_BET;
-                        messenger.message(Channel.get("#spades_live"), "!cgss " + (SPOODLES_BET));
+                        messenger.message(Channel.get("#spades_live"), "!cgss " + (SPOODLES_BET), true);
                     }
                 }
             }
@@ -86,11 +86,11 @@ public class HorseBot {
             if (new Date().getTime() > NEXT_SPOODLES) {
                 NEXT_SPOODLES = setNextSpoodles();
                 if (SPOODLES_POINTS == null) {
-                    messenger.message(Channel.get("#spades_live"), "!points");
+                    messenger.message(Channel.get("#spades_live"), "!points", true);
                 } else {
                     SPOODLES_BET = Math.min((13 + SPOODLES_GOAL - SPOODLES_POINTS) / 14, SPOODLES_POINTS / 40);
                     SPOODLES_POINTS -= SPOODLES_BET;
-                    messenger.message(Channel.get("#spades_live"), "!cgss " + SPOODLES_BET);
+                    messenger.message(Channel.get("#spades_live"), "!cgss " + SPOODLES_BET, true);
                 }
             }
         }

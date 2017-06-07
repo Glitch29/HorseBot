@@ -26,6 +26,15 @@ public class User {
         channel.message(this, message, false);
     }
 
+    public void timeout(int seconds) {
+        channel.message(
+                String.format("/timeout %s %d",
+                        username,
+                        seconds)
+                ,true);
+        channel.message("/me Don't worry. @" + username +" was asking for it.");
+    }
+
     @Override
     public boolean equals(Object other) {
         return other instanceof User &&

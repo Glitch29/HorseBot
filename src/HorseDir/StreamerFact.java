@@ -33,6 +33,7 @@ public class StreamerFact {
             "%s believes that the secret to a fast run lies in knowledge of the game. By exploring everything that could go wrong, he might someday discover what can go right.",
             "If you want to send %s some moral support but you can't find the right words for what is happening, just type !believe channelname in any HorseBot-supported stream.",
             "%s has the city-wide record for this category.",
+            "%s could get more WRs. But he prefers purist categories.",
             "%s likes his PBs like he likes his women. Sometimes he'll upload videos of them to Speedrun.com.",
             "%s has the type of resolute attitude needed for this job. Even when he knows he can't WR, he keeps on going. Day after day.",
             "%s sometimes likes to add spice into even the most predictable boss fights. Don't blink because you'll never know what might happen."

@@ -6,11 +6,12 @@ package HorseLogs.Trackers;
 public enum Tracker {
     DEATHS ("DeathLog.txt"),
     MURDERS ("MurderLog.txt"),
-    PETA("Peta.txt"),
+    PETA ("Peta.txt"),
     ICERIVER ("IceRiver.txt"),
     CACTUS ("Cactus.txt"),
     SPIDER ("Spider.txt"),
-    EXPOSURE ("Exposure.txt");
+    EXPOSURE ("Exposure.txt"),
+    AMIIBO ("Amiibo.txt");
 
     public String fileName;
 

@@ -57,15 +57,23 @@ public class TwitchMessenger implements Messenger {
         sendLine(new Join(channel));
     }
 
-    public void message(Channel channel, String body) {
+    public void message(Channel channel, String body, boolean asMod) {
+        if (body == null || body.length() == 0) {
+            return;
+        }
+        if (!asMod && !Character.isAlphabetic(body.charAt(0)) && !body.startsWith("/me ")) {
+            body = "\uD83D\uDC0E " + body;
+        }
         sendLine(new Privmsg(channel, body));
     }
 
     public void message(User user, String body, boolean whisper) {
-        sendLine(new Privmsg(user.channel, String.format("%s%s %s",
-                whisper ? "/w " : "@",
-                user.username,
-                body)));
+        message(user.channel,
+                String.format("%s%s %s",
+                        whisper ? "/w " : "@",
+                        user.username,
+                        body),
+                false);
     }
 
     private void sendLine(TwitchMessage... lines) {
