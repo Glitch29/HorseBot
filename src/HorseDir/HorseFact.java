@@ -54,7 +54,7 @@ public class HorseFact {
             "A horse is a horse, of course. Of course! And no one can talk to a horse, of course. That is, of " +
                     "course, unless the horse is the famous Mister Ed.",
             "Did you hear the one about a pony with a throat infection? It was a little hoarse.",
-            "Send your ideas and suggestions to HorseBotXD@gmail.com.",
+            "Send your ideas and suggestions to HorseBotXD@gmail.com",
             "With horses like that, who needs enemies?",
             "I memed a meme in time gone by \uD83D\uDC34 When lulz were high and life worth living \uD83D\uDC0E " +
                     "I dreamed that spam would never die \uD83D\uDC34 I dreamed that Mods would be forgiving \uD83D\uDC0E " +

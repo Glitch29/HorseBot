@@ -29,11 +29,10 @@ public class TwitchMessenger implements Messenger {
             return delayedLine.line;
         }
         try {
-            String line = reader.readLine();
-            return line;
+            return reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new AssertionError();
         }
     }
 

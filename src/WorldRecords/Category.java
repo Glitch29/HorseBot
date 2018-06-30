@@ -5,6 +5,8 @@ package WorldRecords;
  */
 public enum Category {
     Tutorial (Game.Overwatch, "Tutorial", "7dggreld", "overwatch"),
+    TS_Any (Game.TitanSouls, "Any%", "02qnop2y", "tsany%"),
+    TS_100 (Game.TitanSouls, "100%", "82476g25", "ts100%"),
     AD (Game.BotW, "All Dungeons","9d8jgv7k", "ad"),
     Any (Game.BotW, "Any%", "vdoq4xvk", "any%"),
     AMQ (Game.BotW, "All Main Quests", "n2yj3r82", "amq"),

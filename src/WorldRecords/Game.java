@@ -5,7 +5,8 @@ package WorldRecords;
  */
 public enum Game {
     BotW("The Legend of Zelda: Breath of the Wild","76rqjqd8"),
-    Overwatch("Overwatch","kdkpol1m");
+    Overwatch("Overwatch","kdkpol1m"),
+    TitanSouls("Titan Souls","pdv04r1w");
     String name;
     String code;
 

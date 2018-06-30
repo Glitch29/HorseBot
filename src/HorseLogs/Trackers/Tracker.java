@@ -11,6 +11,7 @@ public enum Tracker {
     CACTUS ("Cactus.txt"),
     SPIDER ("Spider.txt"),
     EXPOSURE ("Exposure.txt"),
+    BEAST ("BeastGanon.txt"),
     AMIIBO ("Amiibo.txt");
 
     public String fileName;

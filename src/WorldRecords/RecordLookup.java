@@ -40,15 +40,22 @@ public class RecordLookup {
     public static String leaderboard(Category category, Restriction... restrictions) {
         String parameters = "";
         for (int i = 0; i < restrictions.length; i++) {
-            parameters = parameters + (i == 0 ? "?" : ",") + restrictions[i].parameter;
+            parameters = parameters + (i == 0 ? "?" : "&") + restrictions[i].parameter;
         }
 
+        System.out.println(SPEEDRUN_API + String.format(SPEEDRUN_LEADERBOARD + parameters,
+                category.game.code,
+                category.categoryId));
         try (InputStream response = new URL(SPEEDRUN_API + String.format(SPEEDRUN_LEADERBOARD + parameters,
                 category.game.code,
                 category.categoryId)).openStream())
         {
             Scanner scanner = new Scanner(response);
-            JSONObject leaderboard = new JSONObject(scanner.useDelimiter("\\A").next());
+            while (scanner.hasNextLine()) {
+                System.out.println(scanner.nextLine());
+            }
+            JSONObject leaderboard = new JSONObject();
+            System.out.println(leaderboard.toString(4));
             JSONObject data = leaderboard.getJSONObject("data");
             JSONArray runs = data.getJSONArray("runs");
             for (int i = 0; i < runs.length(); i++) {
@@ -72,14 +79,16 @@ public class RecordLookup {
 
     public static String getPBbyName(String name) {
         if (name.toLowerCase().equals("glitch29")) {
-            return "Glitch29 has achieved these PBs over the past 90 days: \uD83D\uDC0E IRL 10k run 1:03:12";
+            return "Glitch29 has achieved these PBs over the past 90 days: " +
+                    "\uD83D\uDC0E IRL 10k run 1:03:12 " +
+                    "\uD83D\uDC0E The Legend of Zelda: Breath of the Wild, Amiiboless Master Mode 100 Baked Apples RTA 46:39";
         }
         try{
             String id = findPlayerID(name);
             if (id.isEmpty()) {
                 return "Player not found.";
             }
-            return getPBs(id) + (name.equals("spades") ? " \uD83D\uDC0E The Legend of Zelda: Breath of the Wild 100 Baked Apples RTA 1:17:39" : "");
+            return getPBs(id) + (name.equals("spades") ? " \uD83D\uDC0E The Legend of Zelda: Breath of the Wild 100 Baked Apples RTA 49:48" : "");
         } catch (IOException e) {
             e.printStackTrace();
             return "";

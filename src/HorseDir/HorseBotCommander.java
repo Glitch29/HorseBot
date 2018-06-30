@@ -199,6 +199,20 @@ public class HorseBotCommander {
                     }
                 }
                 break;
+            case "lightsout":
+                if (superusers.contains(user.username)) {
+                    channel.message("From the starting point:");
+                    channel.message("[***]");
+                    channel.message("[** ]");
+                    channel.message("[ * ]");
+                    channel.message("Press   the following buttons to turn off all nodes:");
+                    channel.message("[*  ]");
+                    channel.message("[  *]");
+                    channel.message("[  *]");
+                } else {
+                    channel.message("LuL git gud");
+                }
+                break;
             case "believe":
                 try {
                     if (scanner.hasNext()) {
@@ -233,7 +247,7 @@ public class HorseBotCommander {
                 channel.message("https://clips.twitch.tv/PlumpImpossibleChoughGOWSkull");
                 break;
             case "votekick":
-                if (user.username.equals("mokmoon123")) {
+                if (user.username.equals("mokmoon123") || user.equals("savevmk")) {
                     user.timeout(15);
                 }
                 if (scanner.hasNext()) {
@@ -249,6 +263,12 @@ public class HorseBotCommander {
                         channel.message(String.format("%s now has %d votes to be removed from this channel.",
                                 target,
                                 votekick.get(t).size()));
+                        if (t.equals("mokmoon123") && votekick.get(t).size() % 7 == 0) {
+                            new User(channel, "mokmoon123").timeout(180);
+                        }
+                        if (t.equals("savevmk") && votekick.get(t).size() % 7 == 0) {
+                            new User(channel, "savevmk").timeout(180);
+                        }
                     }
                 }
                 break;
@@ -280,6 +300,9 @@ public class HorseBotCommander {
                                 votekick.get(message.channel.nick()).size(),
                                 message.channel.nick()));
                     }
+                break;
+            case "challenge":
+                channel.message("Uggg... Clear every single enemy or clear... defeat 71 bokoblins, 1 talus, 1 lynel before activating the tower. Alr... or do we want to include the flying ones? Do we want to include that?");
                 break;
             case "panic":
                 if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
@@ -321,8 +344,11 @@ public class HorseBotCommander {
             case "commands":
                 channel.message("!info, !complimentstreamer, !horsefact \uD83D\uDC0E " + commands + " \uD83D\uDC0E");
                 break;
+            case "lotm":
+                channel.message("https://clips.twitch.tv/ResilientSeductiveStarPunchTrees");
+                break;
             case "info":
-                channel.message("HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
+                channel.message("HorseBotXD tweets at twitter.com/HorseBotXD/.  Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
                 break;
             case "horsefact":
                 if (scanner.hasNextInt()) {
@@ -343,7 +369,7 @@ public class HorseBotCommander {
                 break;
             case "rules":
                 if (scanner.hasNextLine() && scanner.nextLine().toLowerCase().contains("apple")) {
-                    channel.message("100 Baked Apples RTA rules: https://pastebin.com/JWqy4GGm");
+                    channel.message("100 Baked Apples RTA rules: https://pastebin.com/wwkx105i");
                 }
                 break;
             case "mario":
@@ -352,7 +378,7 @@ public class HorseBotCommander {
             case "100ba":
             case "apples":
             case "100apples":
-                channel.message("The best time for The Legend of Zelda: Breath of the Wild, 100 Baked Apples RTA is 58:27 by Acearinos.");
+                channel.message("The best time for The Legend of Zelda: Breath of the Wild, 100 Baked Apples RTA is 46:39 by Glitch29.");
                 break;
             case "trueheroes":
                 channel.message("See the true heroes of Breath of the Wild at horse.spoodles.net  \uD83D\uDC0E");
@@ -383,6 +409,10 @@ public class HorseBotCommander {
                 channel.message("twitch.tv/jgiga 100 Baked Apples RTA, Time: IDK");
                 channel.message("live.spoodles.net Drunk 100 Baked Apples RTA, Time: 750 Followers");
                 channel.message("twitch.tv/glitch29 Painting with Bob Ross, Time: June 10th, 6:00 PST");
+                break;
+            case "facepalm":
+                channel.message("http://i.imgur.com/yxTTY7m.png");
+                break;
         }
         scanner.close();
     }
@@ -405,6 +435,7 @@ public class HorseBotCommander {
 
     private enum Event {
         HORSE (Tracker.DEATHS, "was last killed by a horse.", "\uD83D\uDC0E", "horse"),
+        BEAST (Tracker.BEAST, "got dunked on by Beast Ganon.", "\uD83D\uDE08", "beast"),
         MURDER (Tracker.MURDERS, "brutally murdered a horse.", "D:", "murder"),
         RIVER (Tracker.ICERIVER, "fell into a river and drowned.", "⛄", "river"),
         PETA (Tracker.PETA, "was protested by PETA.", "ᶘ'ᵒᴥᵒᶅ", "peta"),

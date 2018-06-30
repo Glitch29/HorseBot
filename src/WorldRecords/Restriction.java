@@ -4,7 +4,9 @@ package WorldRecords;
  * Created by Aaron Fisher on 5/3/2017.
  */
 public enum Restriction {
-    Amiiboless ("a","Amiiboless", "var-e8m0zxl6=jq6vxwj1");
+    Amiiboless ("a","Amiiboless", "var-e8m0zxl6=jq6vxwj1"),
+    Switch ("s","Switch", "platform=q0j6me3y");
+
 
     String description;
     public String command;

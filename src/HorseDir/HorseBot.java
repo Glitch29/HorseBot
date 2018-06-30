@@ -15,17 +15,16 @@ import java.util.*;
  * Created by Aaron Fisher on 4/20/2017.
  */
 public class HorseBot {
-    private static Integer SPOODLES_POINTS;
     private static int SPOODLES_BET = 0;
     private static final int SPOODLES_GOAL = 1000000000;
-    private static final long SPOODLES_DELAY = 1000L * 650L;
+    private static final long SPOODLES_DELAY = 1000L * 650000L;
     private static long NEXT_SPOODLES = setNextSpoodles();
     private static final String DIRECTORY = "C:\\Users\\Aaron Fisher\\IdeaProjects\\HorseBot\\src\\HorseLogs\\";
     private static final String CHANNEL_LIST = "ChannelData\\Channels.txt";
     private static Account ACCOUNT = new HorseBotXD();
 
     public static void main(String[] args) throws Exception {
-        SPOODLES_POINTS = null;
+        Integer SPOODLES_POINTS = null;
 
         IrcSession ircSession = TwitchIrcSession.getTwitchIRC(ACCOUNT);
         Messenger messenger = new TwitchMessenger(ircSession.getWriter(), ircSession.getReader());
@@ -43,7 +42,7 @@ public class HorseBot {
 
         // Keep reading lines from the server.
         TwitchMessage message;
-        while (SPOODLES_POINTS == null || SPOODLES_POINTS < SPOODLES_GOAL) {
+        while (true) {
             do {
                 message = messenger.nextMessage();
             } while (message == null);
