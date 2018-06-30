@@ -54,7 +54,7 @@ public class HorseFact {
             "A horse is a horse, of course. Of course! And no one can talk to a horse, of course. That is, of " +
                     "course, unless the horse is the famous Mister Ed.",
             "Did you hear the one about a pony with a throat infection? It was a little hoarse.",
-            "Send your ideas and suggestions to HorseBotXD@gmail.com.",
+            "Send your ideas and suggestions to HorseBotXD@gmail.com",
             "With horses like that, who needs enemies?",
             "I memed a meme in time gone by \uD83D\uDC34 When lulz were high and life worth living \uD83D\uDC0E " +
                     "I dreamed that spam would never die \uD83D\uDC34 I dreamed that Mods would be forgiving \uD83D\uDC0E " +
@@ -62,7 +62,23 @@ public class HorseFact {
                     "There was no sub fee to be paid \uD83D\uDC34 No slow mode on, no dankness wasted",
             "Every good Breath of the Wild run will need a 4-speed horse, either from a Super Smash Bros. Series " +
                     "Link amiibo or a lucky spawn in Hyrule Field.",
-            "Horses are the stars of this stream. Everyone else is just bit players."
+            "Horses are the stars of this stream. Everyone else is just bit players.",
+            "On the internet, nobody knows you're a horse.",
+            "Horses can sleep both lying down and standing up.",
+            "With horses like these, who needs enemies?",
+            "This above all: To thine own horse be true.",
+            "\"I'll get you my pretty, and your little horse, too!\" —The Wizard of Oz original script (c. 1939)",
+            "The greatest trick the 4-speed horse ever pulled was convincing the world he didn't exist.",
+            "The first rule of Horse Club is: You do not talk about Horse Club.",
+            "\"You miss 100 percent of the stam resets you never take.\" —Wayne Horzky",
+            "Horse Dancing (also known as Dressage) is the only cross-species artistic event at the summer Olympics.",
+            "Horsium is a chemical element with symbol Hs and atomic number 108, named after the German state of " +
+                    "Horse. It is a synthetic element (an element that can be created in a laboratory but is not " +
+                    "found in nature) and radioactive; the most stable known isotope, 277Hs, has a half-life of " +
+                    "approximately 30 seconds. More than 100 atoms of horsium have been synthesized to date.",
+            "Many think of horses as majestic land mammals. But to the ascetic monks of Vardhaman Mahavira, they " +
+                    "are more than that. Horses are a state of mind; Understanding horse is essential to " +
+                    "understanding oneself."
             ));
 
     public static String fact() {

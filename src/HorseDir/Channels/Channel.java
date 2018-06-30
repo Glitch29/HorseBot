@@ -41,8 +41,12 @@ public class Channel {
     }
 
     public void message(String message) {
+        message(message, false);
+    }
+
+    public void message(String message, boolean asMod) {
         if (message.startsWith("/") ? settings().canMod() : settings().canChat()) {
-            messenger.message(this, message);
+            messenger.message(this, message, asMod);
         }
     }
 

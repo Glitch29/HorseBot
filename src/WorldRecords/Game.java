@@ -4,7 +4,9 @@ package WorldRecords;
  * Created by Aaron Fisher on 5/3/2017.
  */
 public enum Game {
-    BotW("The Legend of Zelda: Breath of the Wild","76rqjqd8");
+    BotW("The Legend of Zelda: Breath of the Wild","76rqjqd8"),
+    Overwatch("Overwatch","kdkpol1m"),
+    TitanSouls("Titan Souls","pdv04r1w");
     String name;
     String code;
 

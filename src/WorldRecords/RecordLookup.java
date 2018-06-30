@@ -24,6 +24,7 @@ public class RecordLookup {
     private static final String SPEEDRUN_API = "http://www.speedrun.com/api/v1/";
     private static final String SPEEDRUN_LEADERBOARD = "leaderboards/%s/category/%s";
     private static final String SPEEDRUN_PLAYER = "users/%s";
+    private static final String SPEEDRUN_PLAYER_FROM_TWITCH = "users?twitch=%s";
     private static final String SPEEDRUN_GAME = "games/%s";
     private static final String SPEEDRUN_CATEGORY = "categories/%s";
     private static final String SPEEDRUN_PBS = "users/%s/personal-bests";
@@ -37,35 +38,38 @@ public class RecordLookup {
     private static final int RADIX = 10;
 
     public static String leaderboard(Category category, Restriction... restrictions) {
-        try (InputStream response = new URL(SPEEDRUN_API + String.format(SPEEDRUN_LEADERBOARD,
+        String parameters = "";
+        for (int i = 0; i < restrictions.length; i++) {
+            parameters = parameters + (i == 0 ? "?" : "&") + restrictions[i].parameter;
+        }
+
+        System.out.println(SPEEDRUN_API + String.format(SPEEDRUN_LEADERBOARD + parameters,
                 category.game.code,
-                category.code)).openStream())
+                category.categoryId));
+        try (InputStream response = new URL(SPEEDRUN_API + String.format(SPEEDRUN_LEADERBOARD + parameters,
+                category.game.code,
+                category.categoryId)).openStream())
         {
             Scanner scanner = new Scanner(response);
-            JSONObject leaderboard = new JSONObject(scanner.useDelimiter("\\A").next());
+            while (scanner.hasNextLine()) {
+                System.out.println(scanner.nextLine());
+            }
+            JSONObject leaderboard = new JSONObject();
+            System.out.println(leaderboard.toString(4));
             JSONObject data = leaderboard.getJSONObject("data");
             JSONArray runs = data.getJSONArray("runs");
             for (int i = 0; i < runs.length(); i++) {
                 JSONObject run = runs.getJSONObject(i).getJSONObject("run");
-                boolean restricted = false;
+                String modifiers = "";
                 for (Restriction restriction : restrictions) {
-                    if (!restricted && getString(run, restriction.key).equals(restriction.value) != restriction.match) {
-                        restricted = true;
-                    }
+                    modifiers = modifiers + restriction.description + " ";
                 }
-                if (!restricted) {
-                    String modifiers = "";
-                    for (Restriction restriction : restrictions) {
-                        modifiers = modifiers + restriction.description + " ";
-                    }
-                    return String.format(LEADERBOARD_RESPONSE,
-                            category.game.name,
-                            modifiers,
-                            category.name,
-                            formatTime(run.getJSONObject("times").getInt("realtime_t"), FALSE),
-                            findPlayerName(run.getJSONArray("players").getJSONObject(0).getString("id")));
-
-                }
+                return String.format(LEADERBOARD_RESPONSE,
+                        category.game.name,
+                        modifiers,
+                        category.name,
+                        formatTime(run.getJSONObject("times").getInt("realtime_t"), FALSE),
+                        findPlayerName(run.getJSONArray("players").getJSONObject(0).getString("id")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,8 +78,26 @@ public class RecordLookup {
     }
 
     public static String getPBbyName(String name) {
+        if (name.toLowerCase().equals("glitch29")) {
+            return "Glitch29 has achieved these PBs over the past 90 days: " +
+                    "\uD83D\uDC0E IRL 10k run 1:03:12 " +
+                    "\uD83D\uDC0E The Legend of Zelda: Breath of the Wild, Amiiboless Master Mode 100 Baked Apples RTA 46:39";
+        }
         try{
             String id = findPlayerID(name);
+            if (id.isEmpty()) {
+                return "Player not found.";
+            }
+            return getPBs(id) + (name.equals("spades") ? " \uD83D\uDC0E The Legend of Zelda: Breath of the Wild 100 Baked Apples RTA 49:48" : "");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getPBbyTwitch(String twitch) {
+        try{
+            String id = findTwitchID(twitch);
             if (id.isEmpty()) {
                 return "Player not found.";
             }
@@ -93,7 +115,6 @@ public class RecordLookup {
             JSONArray runs = getArray(
                 new JSONObject(new Scanner(response).useDelimiter("\\A").next()),
                 "data");
-            System.out.println(runs.toString(4));
             for (int i = 0; i < runs.length(); i++) {
                 try {
                     JSONObject run = runs.getJSONObject(i);
@@ -130,6 +151,18 @@ public class RecordLookup {
         return findName(name, SPEEDRUN_PLAYER, "data", "id");
     }
 
+    private static String findTwitchID(String twitch) throws IOException {
+        try (InputStream response = new URL(SPEEDRUN_API + String.format(SPEEDRUN_PLAYER_FROM_TWITCH, twitch)).openStream()) {
+            JSONObject object = new JSONObject(new Scanner(response).useDelimiter("\\A").next());
+            object = object.getJSONArray("data").getJSONObject(0);
+            return getString(object, "id");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+
     private static String findGameName(String id) throws IOException {
         return findName(id, SPEEDRUN_GAME, "data", "names", "international");
     }
@@ -140,8 +173,8 @@ public class RecordLookup {
 
     private static String findName(String id, String apiFormat, String... tree) {
         try (InputStream response = new URL(SPEEDRUN_API + String.format(apiFormat, id)).openStream()) {
-            return getString(
-                    new JSONObject(new Scanner(response).useDelimiter("\\A").next()),tree);
+            return getString(new JSONObject(new Scanner(response).useDelimiter("\\A").next())
+                    ,tree);
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -177,11 +210,6 @@ public class RecordLookup {
     }
 
     @Test
-    public void testAmiibolessAMQ() {
-        System.out.println(leaderboard(AMQ, Restriction.USA));
-    }
-
-    @Test
     public void testJgigaPBs() {
         System.out.println(getPBs("y8dwy1gj"));
     }
@@ -194,5 +222,10 @@ public class RecordLookup {
     @Test
     public void testAndyByName() {
         System.out.println(getPBbyName("Andy"));
+    }
+
+    @Test
+    public void testSpoodlesByTwitch() {
+        System.out.println(getPBbyTwitch("spades_live"));
     }
 }

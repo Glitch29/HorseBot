@@ -13,12 +13,18 @@ import java.util.*;
  * Created by Aaron Fisher on 4/25/2017.
  */
 public class HorseBotCommander {
+    private String commands;
+    private String wrCommands;
+    private long nextTweet = new Date().getTime();
+    private static long tweetDelay = 3L*60L*1000L;
     private HorseBotDatabase database;
     private HorseBotAdventurer adventurer;
     private Map<String, Set<String>> votekick = new HashMap<>();
     private Set<String> superusers;
     private Map<String, Event> eventMap;
     private Map<String, Event> resetMap;
+    private Map<String, Category> recordMap;
+    private Map<String, Restriction> restrictionMap;
 
     public HorseBotCommander(HorseBotDatabase database, HorseBotAdventurer adventurer) {
         this.database = database;
@@ -26,11 +32,26 @@ public class HorseBotCommander {
         superusers = new HashSet<>();
         superusers.add("glitch29");
         superusers.add("jerrytheret");
+        superusers.add("acearinos");
         resetMap = new HashMap<>();
         eventMap = new HashMap<>();
+        commands = "";
         for (Event event : Event.values()) {
-            resetMap.put(event.emoji, event);
-            eventMap.put(event.name, event);
+            resetMap.put(event.emoji.toLowerCase(), event);
+            eventMap.put(event.name.toLowerCase(), event);
+            commands = commands + " !" + event.name;
+        }
+        recordMap = new HashMap<>();
+        wrCommands = "";
+        for (Category category : Category.values()) {
+            recordMap.put(category.command.toLowerCase(), category);
+            wrCommands = wrCommands + " !" + category.command;
+        }
+        restrictionMap = new HashMap<>();
+        wrCommands = wrCommands + " |";
+        for (Restriction restriction : Restriction.values()) {
+            restrictionMap.put("-" + restriction.command, restriction);
+            wrCommands = wrCommands + " -" + restriction.command;
         }
     }
 
@@ -57,13 +78,70 @@ public class HorseBotCommander {
         if (resetMap.containsKey(command)) {
             Event event = resetMap.get(command);
             event.write(database, message.channel);
-            event.read(database, message.channel);
+            channel.message(event.read(database, message.channel));
         }
         if (eventMap.containsKey(command)) {
             Event event = eventMap.get(command);
-            event.read(database, message.channel);
+            if (scanner.hasNext()) {
+                String modifier = scanner.next();
+                if (modifier.equals("any")) {
+                    try {
+                        Channel targetChannel = Channel.get(database.latestKey(event.tracker));
+                        channel.message(event.read(database, targetChannel));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Channel targetChannel = Channel.get("#" + modifier);
+                        channel.message(event.read(database, targetChannel));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                channel.message(event.read(database, message.channel));
+            }
+        }
+        if (recordMap.containsKey(command)) {
+            List<Restriction> restrictions = new ArrayList<>();
+            while (scanner.hasNext()) {
+                String next = scanner.next();
+                if (restrictionMap.containsKey(next)) {
+                    restrictions.add(restrictionMap.get(next));
+                }
+            }
+            channel.message(RecordLookup.leaderboard(recordMap.get(command), restrictions.toArray(new Restriction[restrictions.size()])));
         }
         switch (command) {
+            case "unsmite":
+                if (user.username.equals("glitch29")) {
+                    channel.message("/unban" + scanner.nextLine());
+                }
+                break;
+            case "smite":
+                if (user.username.equals("glitch29")) {
+                    channel.message("/ban" + scanner.nextLine());
+                }
+                break;
+            case "race":
+                if (channel.broadcaster.equals("spades_live")) {
+                    channel.message("\uD83C\uDFC3 Watch Ace and Spoodles try to get the better Plateau at race.spoodles.net \uD83C\uDFC3");
+                }
+                break;
+            case "rupees":
+                user.directedMessage("tried to check their rupees, but failed. HorseBot has taken them all. \uD83D\uDC0E");
+                break;
+            case "16urns":
+                channel.message("Some people say a run is made outta' gud \uD83C\uDFB5");
+                channel.message("A poor run's made outta' mashing and blood \uD83C\uDFB5");
+                channel.message("Mashing and blood and controllers thrown \uD83C\uDFB5");
+                channel.message("A mind that's a-slippin' and a rage that's strong \uD83C\uDFB6");
+                channel.message("You do sixteen runs, what's the result? \uD83C\uDFB5");
+                channel.message("Another day older and deeper in salt \uD83C\uDFB5");
+                channel.message("Sweet Nature don't you call me 'cause I can't go \uD83C\uDFB5");
+                channel.message("I'm stuck on this chair 'til the run's over \uD83C\uDFB6");
+                break;
             case "f":
                 if (scanner.hasNextInt()) {
                     int degrees = scanner.nextInt();
@@ -87,35 +165,7 @@ public class HorseBotCommander {
                 channel.message("\uD83D\uDD25\uD83D\uDD25 https://clips.twitch.tv/JollySourMomKreygasm \uD83D\uDD25\uD83D\uDD25");
                 break;
             case "strats":
-                channel.message("Visual strat: http://i.imgur.com/WTSMSxG.jpg \uD83D\uDD25\uD83D\uDD25");
-                break;
-            case "anyhorse":
-                try {
-                    Channel targetChannel = Channel.get(database.latestKey(Tracker.DEATHS));
-                    HorseBotDatabase.LongWithNotes data = database.read(Tracker.DEATHS, targetChannel);
-                    channel.message(String.format(
-                           "The last runner to be killed by a horse was %s, %s ago. \uD83D\uDC0E %s",
-                            targetChannel.settings().name(),
-                            timeDifference(data.date),
-                            data.notes
-                    ));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            break;
-            case "anymurder":
-                try {
-                    Channel targetChannel = Channel.get(database.latestKey(Tracker.MURDERS));
-                    HorseBotDatabase.LongWithNotes data = database.read(Tracker.MURDERS, targetChannel);
-                    channel.message(String.format(
-                            "The last runner to murder a horse was %s, %s ago. \uD83D\uDC0E " +
-                                    "HorseBot does not condone this type of behavior. \uD83D\uDC0E",
-                            targetChannel.settings().name(),
-                            timeDifference(data.date)
-                    ));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                channel.message("Hot new" + scanner.nextLine() + " strats: http://i.imgur.com/WTSMSxG.jpg \uD83D\uDD25\uD83D\uDD25");
                 break;
             case "!":
                 if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
@@ -126,17 +176,11 @@ public class HorseBotCommander {
                             channel.message(next + next);
                             channel.message(next + next + next);
                             channel.message(next + next);
-                            if (superusers.contains(user.username)) {
-                                channel.message(next);
-                            } else {
-                                channel.message("Purchase HorseBot Premium to complete this pyramid.");
-                            }
+                            channel.message(next);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else {
-                    user.personalMessage("Interrupt one of Enderjp's pyramids, and post a screenshot of it to enable this feature.");
                 }
                 break;
             case "announce":
@@ -145,16 +189,28 @@ public class HorseBotCommander {
                         if (scanner.hasNext()) {
                             String next = scanner.next().toLowerCase();
                             Channel believe = Channel.get("#" + next);
-                            believe.message(
-                                    (user.username.equals("glitch29") ? "" : "\uD83D\uDC0E ") +
-                                    String.format(
-                                        scanner.nextLine(),
-                                        believe.broadcaster
-                                    ));
+                            believe.message("/me " +
+                                        scanner.nextLine() +
+                                        " \uD83D\uDC0E"
+                                    );
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                break;
+            case "lightsout":
+                if (superusers.contains(user.username)) {
+                    channel.message("From the starting point:");
+                    channel.message("[***]");
+                    channel.message("[** ]");
+                    channel.message("[ * ]");
+                    channel.message("Press   the following buttons to turn off all nodes:");
+                    channel.message("[*  ]");
+                    channel.message("[  *]");
+                    channel.message("[  *]");
+                } else {
+                    channel.message("LuL git gud");
                 }
                 break;
             case "believe":
@@ -191,6 +247,9 @@ public class HorseBotCommander {
                 channel.message("https://clips.twitch.tv/PlumpImpossibleChoughGOWSkull");
                 break;
             case "votekick":
+                if (user.username.equals("mokmoon123") || user.equals("savevmk")) {
+                    user.timeout(15);
+                }
                 if (scanner.hasNext()) {
                     String target = scanner.next();
                     if (target.toLowerCase().equals("glitch29") || target.toLowerCase().equals("horsebotxd")) {
@@ -202,6 +261,29 @@ public class HorseBotCommander {
                     }
                     if (votekick.get(t).add(user.username)) {
                         channel.message(String.format("%s now has %d votes to be removed from this channel.",
+                                target,
+                                votekick.get(t).size()));
+                        if (t.equals("mokmoon123") && votekick.get(t).size() % 7 == 0) {
+                            new User(channel, "mokmoon123").timeout(180);
+                        }
+                        if (t.equals("savevmk") && votekick.get(t).size() % 7 == 0) {
+                            new User(channel, "savevmk").timeout(180);
+                        }
+                    }
+                }
+                break;
+            case "vote":
+                if (scanner.hasNext()) {
+                    String target = scanner.next();
+                    if (target.toLowerCase().equals("glitch29") || target.toLowerCase().equals("horsebotxd")) {
+                        target = user.username;
+                    }
+                    String t = target.toLowerCase();
+                    if (!votekick.containsKey(t)) {
+                        votekick.put(t, new HashSet<>());
+                    }
+                    if (votekick.get(t).add(user.username)) {
+                        channel.message(String.format("%s now has %d votes.",
                                 target,
                                 votekick.get(t).size()));
                     }
@@ -219,6 +301,9 @@ public class HorseBotCommander {
                                 message.channel.nick()));
                     }
                 break;
+            case "challenge":
+                channel.message("Uggg... Clear every single enemy or clear... defeat 71 bokoblins, 1 talus, 1 lynel before activating the tower. Alr... or do we want to include the flying ones? Do we want to include that?");
+                break;
             case "panic":
                 if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
                     channel.message("The stream! panicBasket The stream! panicBasket The stream is on fire!");
@@ -233,47 +318,18 @@ public class HorseBotCommander {
                 break;
             case "points":
                 if (user.username.equals("dylrocks17") && (new Date().getTime() & 30L) == 0L) {
-                    channel.message("/timeout DylRocks17 " + 60*60*24*7);
+                    user.timeout(60*60*24*7);
                 }
                 break;
             case "wr":
-                channel.message("!ad, !any%, !amq, !as, !ms, !ad-a, !any%-a, !amq-a, !as-a, !ms-a \uD83D\uDC0E");
-                break;
-            case "ad":
-                channel.message(RecordLookup.leaderboard(Category.AD));
-                break;
-            case "any%":
-                channel.message(RecordLookup.leaderboard(Category.Any));
-                break;
-            case "amq":
-                channel.message(RecordLookup.leaderboard(Category.AMQ));
-                break;
-            case "as":
-                channel.message(RecordLookup.leaderboard(Category.AS));
-                break;
-            case "ms":
-                channel.message(RecordLookup.leaderboard(Category.MS));
-                break;
-            case "100%":
-                channel.message(RecordLookup.leaderboard(Category.HUNDO));
-                break;
-            case "ad-a":
-                channel.message(RecordLookup.leaderboard(Category.AD, Restriction.Amiiboless));
-                break;
-            case "any%-a":
-                channel.message(RecordLookup.leaderboard(Category.Any, Restriction.Amiiboless));
-                break;
-            case "amq-a":
-                channel.message(RecordLookup.leaderboard(Category.AMQ, Restriction.Amiiboless));
-                break;
-            case "as-a":
-                channel.message(RecordLookup.leaderboard(Category.AS, Restriction.Amiiboless));
-                break;
-            case "ms-a":
-                channel.message(RecordLookup.leaderboard(Category.MS, Restriction.Amiiboless));
+                channel.message("WR Commands:" + wrCommands);
                 break;
             case "pb":
-                channel.message(RecordLookup.getPBbyName(scanner.hasNext() ? scanner.next() : channel.broadcaster));
+                if (scanner.hasNext()) {
+                    channel.message(RecordLookup.getPBbyName(scanner.next()));
+                } else {
+                    channel.message(RecordLookup.getPBbyTwitch(channel.broadcaster));
+                }
                 break;
             case "adventure":
                 if (superusers.contains(user.username) || channel.broadcaster.equals(user.username)) {
@@ -286,10 +342,13 @@ public class HorseBotCommander {
                 }
                 break;
             case "commands":
-                channel.message("!info, !complimentstreamer, !horse, !murder, !horsefact \uD83D\uDC0E");
+                channel.message("!info, !complimentstreamer, !horsefact \uD83D\uDC0E " + commands + " \uD83D\uDC0E");
+                break;
+            case "lotm":
+                channel.message("https://clips.twitch.tv/ResilientSeductiveStarPunchTrees");
                 break;
             case "info":
-                channel.message("HorseBotXD was created by Glitch29. Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
+                channel.message("HorseBotXD tweets at twitter.com/HorseBotXD/.  Its code is available at https://github.com/Glitch29/HorseBot/. \uD83D\uDC0E");
                 break;
             case "horsefact":
                 if (scanner.hasNextInt()) {
@@ -308,12 +367,57 @@ public class HorseBotCommander {
             case "3speed":
                 channel.message("It's always the horses fault, isn't it? ಠ_ಠ");
                 break;
+            case "rules":
+                if (scanner.hasNextLine() && scanner.nextLine().toLowerCase().contains("apple")) {
+                    channel.message("100 Baked Apples RTA rules: https://pastebin.com/wwkx105i");
+                }
+                break;
+            case "mario":
+                channel.message("https://clips.twitch.tv/ToughWiseGarageDansGame");
+                break;
+            case "100ba":
+            case "apples":
+            case "100apples":
+                channel.message("The best time for The Legend of Zelda: Breath of the Wild, 100 Baked Apples RTA is 46:39 by Glitch29.");
+                break;
+            case "trueheroes":
+                channel.message("See the true heroes of Breath of the Wild at horse.spoodles.net  \uD83D\uDC0E");
+                break;
+            case "about":
+                String next = scanner.nextLine().toLowerCase().substring(1);
+                if (next.contains("shadowverse")) {
+                    channel.message("Shadowverse is a free-to-play collectible card video game developed and " +
+                            "published by Cygames. It was released for iOS and Android devices in June 2016, and " +
+                            "it is a well regarded cure for insomnia or overcrowded streams. ResidentSleeper");
+                } else if (next.contains("apple")) {
+                    channel.message("100 Baked Apples RTA = best category NA.");
+                } else if (next.contains("horse")) {
+                    channel.message("\uD83D\uDC0E is love. \uD83D\uDC0E is life.");
+                } else {
+                    channel.message("Who really cares about " + next + "?");
+                }
+                break;
+            case "addclip":
+            case "tweet":
+                if (user.username.equals("glitch29") || new Date().getTime() > nextTweet) {
+                    HorseBotTweets.sendTweet(scanner.nextLine().substring(1));
+                    nextTweet = new Date().getTime() + tweetDelay;
+                }
+                break;
+            case "events":
+                channel.message("Check out these upcoming events:");
+                channel.message("twitch.tv/jgiga 100 Baked Apples RTA, Time: IDK");
+                channel.message("live.spoodles.net Drunk 100 Baked Apples RTA, Time: 750 Followers");
+                channel.message("twitch.tv/glitch29 Painting with Bob Ross, Time: June 10th, 6:00 PST");
+                break;
+            case "facepalm":
+                channel.message("http://i.imgur.com/yxTTY7m.png");
+                break;
         }
         scanner.close();
     }
 
-    private static String timeDifference(long start) {
-        long end = new Date().getTime();
+    private static String timeDifference(long start, long end) {
         long seconds = (end - start) / 1000L;
         long minutes = seconds / 60L;
         long hours = minutes / 60L;
@@ -325,14 +429,20 @@ public class HorseBotCommander {
                 + (seconds % 60) + " seconds");
     }
 
+    private static String timeDifference(long start) {
+        return timeDifference(start, new Date().getTime());
+    }
+
     private enum Event {
         HORSE (Tracker.DEATHS, "was last killed by a horse.", "\uD83D\uDC0E", "horse"),
+        BEAST (Tracker.BEAST, "got dunked on by Beast Ganon.", "\uD83D\uDE08", "beast"),
         MURDER (Tracker.MURDERS, "brutally murdered a horse.", "D:", "murder"),
         RIVER (Tracker.ICERIVER, "fell into a river and drowned.", "⛄", "river"),
         PETA (Tracker.PETA, "was protested by PETA.", "ᶘ'ᵒᴥᵒᶅ", "peta"),
         EXPOSURE (Tracker.EXPOSURE, "died to exposure.", "\uD83C\uDF1E", "exposure"),
         SPIDER (Tracker.SPIDER, "died to Calamity Ganon.", "\uD83D\uDD77", "spider"),
-        CACTUS (Tracker.CACTUS, "bombed a cactus at point blank range.", "\uD83C\uDF35", "cactus");
+        CACTUS (Tracker.CACTUS, "bombed a cactus at point blank range.", "\uD83C\uDF35", "cactus"),
+        AMIIBO (Tracker.AMIIBO, "was crushed to death by his own Amiibo crate.", "\uD83D\uDE02", "amiibo");
 
         private static String PREFIX = "It has been %s since %s ";
         private static String POSTFIX = " %s %s";
@@ -348,17 +458,20 @@ public class HorseBotCommander {
             this.name = name;
         }
 
-        private void read(HorseBotDatabase database, Channel channel) {
+        private String read(HorseBotDatabase database, Channel channel) {
             HorseBotDatabase.LongWithNotes data = database.read(tracker, channel);
             if (data == null) {
-                return;
+                return "";
             }
-            channel.message(String.format(
+            if (data.notes == null || data.notes.equals("")) {
+                data.notes = "!addclip " + data.date;
+            }
+            return String.format(
                     PREFIX + message + POSTFIX,
                     timeDifference(data.date),
                     channel.nick(),
                     emoji,
-                    data.notes));
+                    data.notes);
         }
 
         private void write(HorseBotDatabase database, Channel channel) {
